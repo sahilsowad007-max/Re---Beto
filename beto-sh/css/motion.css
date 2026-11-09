@@ -141,3 +141,8 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   .xhero::before,.mx-progress{display:none}
   .xhero-stage.hop .still,.hero-message.pending::after{animation:none}
 }
+
+/* a taller nav bar */
+.nav-in{min-height:60px}
+.nav-cta .btn{min-height:42px}
+.links a{padding-block:10px}
