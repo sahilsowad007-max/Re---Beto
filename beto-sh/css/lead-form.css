@@ -1,0 +1,45 @@
+/* Contact form, shared by the Beto, Mando and Pia pages (the same file in each
+   site's public/css; a test keeps them identical). Each page sets the --lf-*
+   colours on its .lf-sec section to match its own look. Behaviour lives in
+   js/lead-form.js. */
+.lf-sec{--lf-card:#fff;--lf-ink:#0f1729;--lf-dim:#64748b;--lf-line:#d9d3ca;--lf-field:#fbfaf8;--lf-accent:#0f1729;--lf-on-accent:#fff;--lf-hint:#9a3412;--lf-tick:#0f1729;--lf-radius:24px;--lf-field-radius:14px}
+.lf-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,72px);align-items:start}
+.lf-points{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:12px;font-size:17px;color:var(--lf-ink)}
+.lf-points li{display:flex;gap:12px;align-items:flex-start}
+.lf-points li::before{content:"";flex-shrink:0;width:22px;height:22px;margin-top:3px;border-radius:50%;background:var(--lf-tick) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/13px no-repeat}
+.lead-card{background:var(--lf-card);border:1px solid var(--lf-line);border-radius:var(--lf-radius);padding:clamp(20px,3vw,32px);box-shadow:0 30px 60px -40px rgba(15,23,41,.35);color:var(--lf-ink)}
+.lead-head{margin-bottom:20px}
+.lead-head b{display:block;font-size:20px;font-weight:600}
+.lead-head span{display:block;font-size:15px;color:var(--lf-dim)}
+.lead-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 16px}
+.lead-fields .f{display:grid;gap:6px;align-content:start;min-width:0;margin:0;padding:0;border:0}
+.lead-fields .full{grid-column:1/-1}
+.lead-fields .f>span,.lead-fields legend{font-size:14px;font-weight:600;padding:0}
+.lead-fields legend{margin-bottom:8px}
+.lead-fields i{font-style:normal;font-weight:400;color:var(--lf-dim)}
+.lead-fields input:not([type=radio]),.lead-fields textarea{width:100%;min-height:50px;padding:12px 15px;border-radius:var(--lf-field-radius);border:1px solid var(--lf-line);background:var(--lf-field);color:var(--lf-ink);font:400 16px/1.4 inherit;font-family:inherit;transition:border-color .2s,box-shadow .2s}
+.lead-fields textarea{resize:vertical;min-height:96px}
+.lead-fields input::placeholder,.lead-fields textarea::placeholder{color:var(--lf-dim);opacity:.75}
+.lead-fields input:focus,.lead-fields textarea:focus{outline:0;border-color:var(--lf-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--lf-accent) 22%,transparent)}
+.lead-fields .f.ask input{border-color:var(--lf-hint)}
+.lead-fields .hint{font-size:13.5px;color:var(--lf-hint)}
+.lead-fields .hint:empty{display:none}
+.lead-chips{display:flex;flex-wrap:wrap;gap:8px}
+.lead-chips label{position:relative;cursor:pointer}
+.lead-chips input{position:absolute;opacity:0;pointer-events:none}
+.lead-chips span{display:inline-flex;align-items:center;min-height:42px;padding:0 15px;border-radius:999px;border:1px solid var(--lf-line);background:var(--lf-card);font-size:15px;transition:background .2s,border-color .2s,color .2s}
+.lead-chips input:checked+span{background:var(--lf-accent);border-color:var(--lf-accent);color:var(--lf-on-accent);font-weight:600}
+.lead-chips input:focus-visible+span{box-shadow:0 0 0 3px color-mix(in srgb,var(--lf-accent) 30%,transparent)}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.lead-send{width:100%;justify-content:center;margin-top:22px}
+.lead-send[disabled]{opacity:.7;cursor:progress;transform:none}
+.lead-note{font-size:13.5px;margin:12px 0 0;text-align:center;color:var(--lf-dim)}
+.lead-note a{color:var(--lf-ink)}
+.lead-done{text-align:center;padding:36px 8px;display:grid;justify-items:center;gap:14px}
+.lead-done[hidden]{display:none}
+.lead-done:focus{outline:0}
+.lead-done .ok{width:64px;height:64px;border-radius:50%;background:var(--lf-tick) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/30px no-repeat}
+.lead-done h3{font-size:28px;margin:0}
+.lead-done p{margin:0;font-size:17px;max-width:420px;color:var(--lf-dim)}
+@media (max-width:920px){.lf-grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.lead-fields{grid-template-columns:minmax(0,1fr)}}

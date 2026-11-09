@@ -1,0 +1,143 @@
+/* beto.sh motion layer: tighter gutters, scroll reveals, section-to-section
+   transitions and an interactive hero. Loaded after enterprise.css; every
+   colour comes from the :root tokens in home.css. Hidden-until-revealed states
+   only apply under .mx, which motion.js sets, so the page reads with scripting
+   off or with reduced motion. */
+
+:root{
+  --gutter:clamp(14px,2vw,28px);
+  --max:1480px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --ease-soft:cubic-bezier(.33,1,.68,1);
+}
+body{overflow-x:clip}
+
+/* ---- wider container, narrower side padding ------------------------------ */
+.xhero-in{width:100%;max-width:var(--max);padding-inline:var(--gutter)}
+.xhero-copy{max-width:420px}
+.section.dark{margin-inline:clamp(0px,.8vw,12px)}
+@media (max-width:620px){.section.dark{margin-inline:6px}}
+.hero-aside{pointer-events:auto;text-align:right}
+.hero-aside>a{display:inline-flex}
+.hero-year{justify-items:end}
+
+/* ---- section to section: stacked sheets that slide over each other -------- */
+.section:not(.dark){
+  background-color:var(--paper);
+  border-radius:clamp(20px,2.4vw,36px) clamp(20px,2.4vw,36px) 0 0;
+  margin-top:calc(clamp(20px,2.4vw,36px) * -1);
+}
+.section.tint:not(.dark){background-color:var(--cream)}
+.section.dark + .section:not(.dark){margin-top:0}
+.section:not(.dark) .wrap{padding-top:clamp(8px,1.4vw,20px)}
+#hero{position:relative;z-index:0}
+main > section:not(#hero){z-index:1}
+main > section:not(#hero) ~ section:not(#hero){z-index:2}
+
+/* scroll progress */
+.mx-progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:90;pointer-events:none;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--orange),var(--terra));opacity:0;transition:opacity .3s}
+.mx-progress.on{opacity:1}
+
+/* nav: the current section */
+.links a{transition:background .25s var(--ease),color .25s var(--ease)}
+.links a[aria-current="true"]{background:var(--white);color:var(--ink)}
+
+/* ---- footer: the last sheet, stacked over the final section --------------- */
+.bfoot{
+  position:relative;z-index:3;
+  margin-top:calc(clamp(20px,2.4vw,36px) * -1);
+  border-radius:clamp(20px,2.4vw,36px) clamp(20px,2.4vw,36px) 0 0;
+}
+.mx .bfoot .reveal{translate:0 36px}
+.mx .bfoot .reveal.in{translate:0 0}
+
+/* ---- reveals ------------------------------------------------------------- */
+.mx .reveal,.mx .motion-ready .reveal{
+  opacity:0;
+  translate:0 28px;
+  transform:none;
+  transition:opacity .9s var(--ease-soft),translate .9s var(--ease-soft);
+  transition-delay:var(--d,0ms);
+}
+.mx .reveal.in{opacity:1;translate:0 0}
+
+.mx .head h2 .w{display:inline-block;opacity:0;translate:0 .5em;transition:opacity .7s var(--ease-soft),translate .7s var(--ease-soft);transition-delay:calc(var(--i,0) * 38ms + 120ms)}
+.mx .head.in h2 .w{opacity:1;translate:0 0}
+.mx .head .kicker,.mx .head .lede{transition-delay:calc(var(--d,0ms) + 60ms)}
+
+/* cards lift a little more on hover once revealed */
+.pillar,.run,.ind,.risks li{transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .9s var(--ease-soft),translate .9s var(--ease-soft)}
+.pillar:hover,.run:hover,.ind:hover,.risks li:hover{transform:translateY(-6px)}
+
+/* ---- hero ----------------------------------------------------------------- */
+.xhero{--px:0;--py:0;--hp:0;--mx:50%;--my:40%}
+.xhero::before{
+  content:"";position:absolute;left:0;top:0;width:560px;height:560px;z-index:0;pointer-events:none;
+  border-radius:50%;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--gold) 30%,transparent),transparent);
+  translate:calc(var(--mx) - 280px) calc(var(--my) - 280px);
+  opacity:0;transition:opacity .6s var(--ease);will-change:translate;
+}
+.xhero.aim::before{opacity:.75}
+
+.xhero-bg{translate:calc(var(--px) * 10px) calc(var(--py) * 6px)}
+.xhero-in{opacity:calc(1 - var(--hp) * .95);translate:0 calc(var(--hp) * -48px)}
+.xhero-stage{opacity:calc(1 - var(--hp) * .7);translate:0 calc(var(--hp) * 70px);cursor:pointer}
+.xhero-stage .still{translate:calc(var(--px) * -18px) calc(var(--py) * -10px);transition:translate .5s var(--ease-soft)}
+.xhero-stage.hop .still{animation:mx-hop .9s var(--ease) 1}
+@keyframes mx-hop{
+  0%{scale:1;rotate:0deg}
+  25%{scale:1.05 .96;rotate:-2deg}
+  55%{scale:.98 1.07;rotate:2deg}
+  100%{scale:1;rotate:0deg}
+}
+.hero-demo{opacity:calc(1 - var(--hp) * 1.1);translate:calc(var(--px) * 8px) calc(var(--hp) * 40px + var(--py) * 5px);transition:box-shadow .35s var(--ease)}
+.hero-demo:hover{box-shadow:0 36px 76px -40px color-mix(in srgb,var(--ink) 55%,transparent)}
+
+/* a bigger Beto on desktop */
+@media (min-width:941px){
+  .xhero-stage .still{height:72%;bottom:20%}
+}
+
+/* headline words: rise in on load, lift on hover */
+.xhero h1 .w{display:inline-block;opacity:0;translate:0 .6em;transition:opacity .9s var(--ease-soft),translate .9s var(--ease-soft),color .25s;transition-delay:calc(var(--i,0) * 70ms + 150ms)}
+.xhero.go h1 .w{opacity:1;translate:0 0}
+.xhero.go h1 .w:hover{translate:0 -.08em;color:var(--terra);transition-delay:0ms}
+.xhero .glowtext .w:hover{color:var(--terra)}
+.xhero .ctas,.xhero .hero-aside{opacity:1}
+.mx .xhero:not(.go) .ctas,.mx .xhero:not(.go) .hero-aside{opacity:0;translate:0 18px}
+.mx .xhero .ctas,.mx .xhero .hero-aside{transition:opacity .9s var(--ease-soft) .75s,translate .9s var(--ease-soft) .75s}
+
+/* magnetic actions */
+[data-magnet]{translate:var(--tx,0) var(--ty,0);transition:translate .3s var(--ease),transform .2s,box-shadow .2s,background .15s}
+
+/* live demo conversation */
+.hero-demo-bar{position:relative}
+.hero-replay{margin-left:auto;min-height:24px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:var(--white);color:var(--slate);font:inherit;font-size:11px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.hero-replay:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.hero-replay:focus-visible{outline:2px solid var(--ink-2);outline-offset:2px}
+.mx .hero-message{position:relative;opacity:0;translate:0 12px;transition:opacity .5s var(--ease-soft),translate .5s var(--ease-soft)}
+.mx .hero-message.on{opacity:1;translate:0 0}
+.mx .hero-message .dw{opacity:1;transition:opacity .35s var(--ease-soft);transition-delay:calc(var(--i,0) * 28ms)}
+.mx .hero-message.pending .dw,.mx .hero-message.pending small{opacity:0;transition:none}
+.mx .hero-message small{transition:opacity .5s var(--ease-soft) .3s}
+.hero-message.pending::after{content:"\2022\2022\2022";position:absolute;left:14px;top:50%;translate:0 -50%;letter-spacing:.2em;color:var(--dim);animation:mx-typing 1s ease-in-out infinite}
+@keyframes mx-typing{0%,100%{opacity:.25}50%{opacity:1}}
+.hero-demo-input{transition:border-color .3s,box-shadow .3s}
+.hero-demo.done .hero-demo-input{border-color:var(--river);box-shadow:0 0 0 4px color-mix(in srgb,var(--river) 14%,transparent)}
+
+@media (max-width:940px){
+  .xhero-in{padding-inline:0}
+  .xhero-in{opacity:1;translate:none}
+  .xhero-stage{translate:none;opacity:1}
+  .hero-demo{translate:none;opacity:1}
+  .xhero::before{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .mx .reveal,.mx .motion-ready .reveal,.mx .head h2 .w,.xhero h1 .w,.mx .hero-message,.mx .hero-message .dw,.mx .xhero .ctas,.mx .xhero .hero-aside{opacity:1;translate:none;transition:none}
+  .xhero-stage .still,[data-magnet]{translate:none;transition:none}
+  .xhero-in,.xhero-stage,.hero-demo,.xhero-bg{opacity:1;translate:none}
+  .xhero::before,.mx-progress{display:none}
+  .xhero-stage.hop .still,.hero-message.pending::after{animation:none}
+}

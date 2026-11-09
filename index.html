@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en"><head></head><body class="ent" data-new-gr-c-s-check-loaded="14.1345.0" data-gr-ext-installed=""><plasmo-csui></plasmo-csui>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- GA4 (G-801CGHDSQ5): consent defaults first, then the config and the tag, on beto.sh only. Events: /js/analytics.js -->
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'],wait_for_update:500});gtag('set','ads_data_redaction',true);if(location.hostname==='beto.sh'){gtag('js',new Date());gtag('config','G-801CGHDSQ5');var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id=G-801CGHDSQ5';document.head.appendChild(g);}</script><script async="" src="www-googletagmanager-com/gtag/js"></script>
+<script defer="" src="beto-sh/js/analytics.js"></script>
+<title>Private AI for your enterprise · Beto</title>
+<meta name="description" content="Your own AI, on your infrastructure, under your rules. Betopia builds and runs private AI for banks, government and enterprises, on QSor GPUs or your own servers.">
+<meta name="theme-color" content="#F7F8FD">
+<link rel="icon" href="beto-sh/assets/icon/favicon.ico" sizes="any">
+<link rel="icon" href="beto-sh/assets/icon/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="beto-sh/assets/icon/apple-touch-icon.png">
+<link rel="manifest" href="beto-sh/site.webmanifest">
+<link rel="canonical" href="beto-sh/">
+<link rel="alternate" type="text/markdown" title="Guide for AI assistants" href="beto-sh/llms.txt">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Beto">
+<meta property="og:url" content="https://beto.sh/">
+<meta property="og:title" content="Private AI for your enterprise">
+<meta property="og:description" content="Your own AI. On your infrastructure. Under your rules. Built and run by Betopia.">
+<meta property="og:image" content="https://beto.sh/assets/social/og-home.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Beto's 3D head icon beside the line: Your own AI. On your infrastructure. Under your rules.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Private AI for your enterprise">
+<meta name="twitter:description" content="Your own AI. On your infrastructure. Under your rules. Built and run by Betopia.">
+<meta name="twitter:image" content="https://beto.sh/assets/social/og-home.jpg">
+<link rel="preconnect" href="fonts-googleapis-com/">
+<link rel="preconnect" href="fonts-gstatic-com/" crossorigin="">
+<link href="fonts-googleapis-com/css2" rel="stylesheet">
+<link rel="modulepreload" href="cdn-jsdelivr-net/npm/three@0.160.0/build/three.module.js">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<link rel="stylesheet" href="beto-sh/css/lead-form.css">
+<link rel="stylesheet" href="beto-sh/home/home.css">
+<link rel="stylesheet" href="beto-sh/home/enterprise.css">
+<link rel="stylesheet" href="beto-sh/css/motion.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://beto.sh/#org",
+   "name": "Betopia Limited",
+   "url": "https://betopialimited.com",
+   "logo": "https://beto.sh/assets/icon/icon-512.png",
+   "email": "sales@betopialimited.com"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://beto.sh/#website",
+   "url": "https://beto.sh/",
+   "name": "Beto",
+   "description": "Private AI for your enterprise: your own AI, on your infrastructure, under your rules. Built and run by Betopia.",
+   "publisher": {"@id": "https://beto.sh/#org"},
+   "inLanguage": ["en", "bn"]
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://beto.sh/#webpage",
+   "url": "https://beto.sh/",
+   "name": "Private AI for your enterprise",
+   "description": "Your own AI, on your infrastructure, under your rules. Betopia builds and runs private AI for banks, government and enterprises, on QSor GPUs or your own servers.",
+   "isPartOf": {"@id": "https://beto.sh/#website"},
+   "about": {"@id": "https://beto.sh/#service"},
+   "primaryImageOfPage": {"@type": "ImageObject", "url": "https://beto.sh/assets/social/og-home.jpg", "width": 1200, "height": 630},
+   "inLanguage": "en"
+  },
+  {
+   "@type": "Service",
+   "@id": "https://beto.sh/#service",
+   "name": "Private AI for your enterprise",
+   "serviceType": "Private and sovereign enterprise AI",
+   "description": "A private AI for your organisation, built and run by Betopia, layer by layer: infrastructure, models, knowledge hub, agents and integration, security and governance, and apps on web and mobile.",
+   "provider": {"@id": "https://beto.sh/#org"},
+   "brand": {"@type": "Brand", "name": "Beto", "logo": "https://beto.sh/assets/icon/icon-512.png"},
+   "url": "https://beto.sh/",
+   "areaServed": "Worldwide",
+   "availableLanguage": ["Bengali", "English"],
+   "audience": {"@type": "BusinessAudience", "audienceType": "Banks, government, telecom, healthcare and large enterprises"},
+   "category": ["Banks and MFS", "Telecom", "Government", "Healthcare", "Manufacturing and RMG", "Conglomerates"],
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Where it runs, each scoped with you and priced in writing",
+    "itemListElement": [
+     {"@type": "Offer", "name": "Hosted private", "description": "Dedicated GPUs on QSor, inside Bangladesh. You hold the keys, Betopia runs it."},
+     {"@type": "Offer", "name": "Your cloud", "description": "Your own cloud account, or QSor endpoints inside your private network. You hold the keys."},
+     {"@type": "Offer", "name": "Your data centre", "description": "Your servers and GPUs, in your building. Your team runs it, with Betopia's support."}
+    ]
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://beto.sh/#faq",
+   "url": "https://beto.sh/#faq",
+   "mainEntity": [
+    {"@type": "Question", "name": "Is our data used to train anyone else's AI?", "acceptedAnswer": {"@type": "Answer", "text": "No. Your documents answer your people and your customers. That is all they do."}},
+    {"@type": "Question", "name": "Where does it run?", "acceptedAnswer": {"@type": "Answer", "text": "On dedicated GPUs on QSor in Dhaka, in your own cloud, or on your own servers. We agree this in the first meeting, before anything is loaded."}},
+    {"@type": "Question", "name": "Which models does it use?", "acceptedAnswer": {"@type": "Answer", "text": "Open models such as Llama, Qwen and DeepSeek, tuned on your knowledge, or a commercial model through your own gateway and policy. You can switch the model later without rebuilding the AI."}},
+    {"@type": "Question", "name": "Can we use our own GPUs?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Or start on dedicated GPUs on QSor and move to your own later. Your knowledge and settings move with you."}},
+    {"@type": "Question", "name": "Who can see what?", "acceptedAnswer": {"@type": "Answer", "text": "Your single sign-on and your roles decide. A teller sees what a teller needs, and every question and answer is logged."}},
+    {"@type": "Question", "name": "Does it speak Bangla?", "acceptedAnswer": {"@type": "Answer", "text": "Bangla and English, typed or spoken, including Bangla written in English letters."}},
+    {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on where it runs, which models it uses and how many people use it. We scope it with you and put the price in writing."}}
+   ]
+  }
+ ]
+}
+</script>
+<link rel="stylesheet" href="beto-sh/css/footer.css">
+<style>.f1l1o3bf{font-family:Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, Arial;font-style:normal;font-weight:400}.f1l1o3bf button, .f1l1o3bf input, .f1l1o3bf textarea{font-family:inherit}.f4ofdyf{border:0.5px solid var(--origin-color-border-base-subdued);border-radius:8px;cursor:pointer;height:24px;transition:width 150ms cubic-bezier(0.05, 0.6, 0, 1), height 150ms cubic-bezier(0.05, 0.6, 0, 1), border-radius 150ms cubic-bezier(0.05, 0.6, 0, 1);width:24px}.f137tu7e{flex-shrink:0;transform:scale(1);transition:transform 150ms cubic-bezier(0.05, 0.6, 0, 1)}[data-origin-mode="dark"] .f137tu7e{--origin-color-logo-grammarly-light:var(--origin-color-logo-grammarly-dark);--origin-color-logo-grammarly-primary:var(--origin-color-logo-grammarly-default)}.ftwgcg0{-moz-appearance:none;-webkit-appearance:none;align-items:flex-start;appearance:none;background:transparent;border:none;color:inherit;cursor:pointer;display:flex;font:inherit;height:32px;justify-content:flex-start;padding:0;width:32px}.ftwgcg0:hover .f4ofdyf{border-radius:12px;height:32px;width:32px}.ftwgcg0:hover .f137tu7e{transform:scale(1.25)}.f13cnbb7 .f4ofdyf{border-radius:12px;height:32px;width:32px}.f13cnbb7 .f137tu7e{transform:scale(1.25)}.f8ia88a{--origin-color-button-ghost-content-default:#714cb6;--origin-color-button-ghost-content-states:#533192;--origin-color-button-primary-fill-active:#3f256f;--origin-color-button-primary-fill-default:#714cb6;--origin-color-button-primary-fill-hover:#533192;--origin-font-weight-heading-xsmall:600}[data-origin-mode="dark"] .f8ia88a{--origin-color-button-ghost-content-default:#d4c7ff;--origin-color-button-ghost-content-states:#bea1f5;--origin-color-button-primary-content-default:#141413;--origin-color-button-primary-fill-active:#e8e0ff;--origin-color-button-primary-fill-default:#bea1f5;--origin-color-button-primary-fill-hover:#d4c7ff}.f347vxz{font-weight:600}</style>
+
+<a class="skip" href="#main">Skip to the page</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="/" aria-label="Beto home"><img class="logo-dark" src="beto-sh/assets/logo/beto-logo.svg" alt="Beto" width="96" height="32"><img class="logo-light" src="beto-sh/assets/logo/beto-logo-light.svg" alt="" width="96" height="32"></a>
+    <nav class="links" id="links" aria-label="Main">
+      <a href="#why">Private AI</a>
+      <a href="#stack">Layers</a>
+      <a href="#runs">Deployment</a>
+      <a href="#industries">Industries</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <button type="button" class="btn ghost sm hide-sm" data-chat="private">Talk to Beto</button>
+      <a class="btn sm" href="#plan">Book a briefing</a>
+      <button type="button" class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="links"><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- 1 · hero: Beto at the centre of a private AI conversation -->
+<section class="xhero" id="hero">
+  <div class="xhero-bg" aria-hidden="true"><i class="stars"></i><i class="aurora"></i></div>
+  <div class="stage xhero-stage" id="st-hero" role="img" aria-label="Beto, the private AI assistant."><img class="still" src="beto-sh/assets/beto/beto-front.webp" alt="" loading="eager"></div>
+  <div class="wrap xhero-in">
+    <div class="xhero-copy">
+      <h1>Your own AI.<br>On your<br>infrastructure.<br><span class="glowtext">Under your<br>rules.</span></h1>
+      <div class="ctas">
+        <a class="btn gold" href="#plan">Book a private briefing</a>
+      </div>
+    </div>
+    <aside class="hero-aside">
+      <p>Beto builds and runs a private AI inside your organisation’s own walls. It reads your documents, speaks Bangla and English, and you make every rule.</p>
+      <a href="#stack">See how it works</a>
+      <p class="hero-year"><span>2026</span>Innovation</p>
+    </div>
+  </div>
+  <aside class="hero-demo" aria-label="Example private AI conversation">
+    <div class="hero-demo-bar"><span></span><span></span><span></span><p>beto.your-organisation.ai</p></div>
+    <div class="hero-message theirs">What is our inward remittance limit for a single customer?</div>
+    <div class="hero-message ours">The remittance circular sets a daily limit per customer, with a higher limit for verified accounts.<small>Source: Remittance policy, section 4</small></div>
+    <div class="hero-message theirs bengali" lang="bn">বাংলায় সংক্ষেপে বলো</div>
+    <div class="hero-demo-input">Ask Beto anything about your company <span>Private</span></div>
+  </aside>
+</section>
+
+<!-- 2 · why not public AI -->
+<section class="section why" id="why">
+  <div class="wrap why-in">
+    <div class="head reveal" style="transition-delay: 0ms;">
+      <p class="kicker"><span class="dot"></span>Why not public AI</p>
+      <h2>Your staff already use AI. <span class="mark">The question is whose.</span></h2>
+      <p class="lede">Every week someone pastes a customer file, a board paper or a loan memo into a public chatbot. A private AI gives them the same help without the leak.</p>
+    </div>
+    <ul class="risks">
+      <li class="reveal" style="transition-delay: 70ms;"><span class="ri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg></span><b>It leaves the country</b><span>Public AI runs on servers abroad, under foreign law.</span></li>
+      <li class="reveal" style="transition-delay: 140ms;"><span class="ri"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"></path></svg></span><b>It sits under someone else's terms</b><span>The vendor decides what it keeps, and for how long.</span></li>
+      <li class="reveal" style="transition-delay: 210ms;"><span class="ri"><svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.2A9.7 9.7 0 0 1 12 5c5 0 8.5 4.5 9.5 7a11.8 11.8 0 0 1-3 4.1M6.6 6.6C4.6 8 3.2 10 2.5 12c1 2.5 4.5 7 9.5 7 1.6 0 3-.4 4.3-1.1"></path></svg></span><b>You cannot audit it</b><span>No record of who asked what, or what went out.</span></li>
+      <li class="reveal" style="transition-delay: 0ms;"><span class="ri"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M19 21V10M9 21v-7M15 21v-7M2 10l10-6 10 6z"></path></svg></span><b>Your regulator will ask</b><span>Banks and ministries must show where their data lives.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3 · three pillars -->
+<section class="section" id="pillars">
+  <div class="wrap">
+    <div class="head reveal" style="transition-delay: 70ms;">
+      <p class="kicker"><span class="dot"></span>What private AI means</p>
+      <h2>Three promises, <span class="mark">built in from the first layer.</span></h2>
+    </div>
+    <div class="pillars">
+      <article class="pillar reveal" style="--k: var(--terra); --s: var(--terra-soft); transition-delay: 140ms;"><div class="pt"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></span><i>01</i></div><h3>Private</h3><p>Your data never leaves your boundary and trains nobody else's model.</p><ul><li>No training on your data</li><li>Your documents, your answers</li><li>Every answer logged</li></ul></article>
+      <article class="pillar reveal" style="--k: var(--river); --s: var(--river-soft); transition-delay: 210ms;"><div class="pt"><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"></path></svg></span><i>02</i></div><h3>Sovereign</h3><p>In your country, under your law, with your keys. No lock-in to a model vendor.</p><ul><li>Runs in Bangladesh or in your data centre</li><li>You hold the keys</li><li>Switch models without a rebuild</li></ul></article>
+      <article class="pillar reveal" style="--k: #8a6114; --s: var(--gold-soft); transition-delay: 0ms;"><div class="pt"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 5.6L20 11l-5.6 2.4L12 19l-2.4-5.6L4 11l5.6-2.4z"></path></svg></span><i>03</i></div><h3>Made for you</h3><p>Your knowledge, your systems, your language and your rules.</p><ul><li>Bangla and English, typed or spoken</li><li>Connected to your ERP, CRM, core banking</li><li>Your name, your brand, your guardrails</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · the stack, layer by layer -->
+<section class="section tint" id="stack">
+  <div class="wrap">
+    <div class="head reveal" style="transition-delay: 70ms;">
+      <p class="kicker"><span class="dot"></span>The stack, layer by layer</p>
+      <h2>Every layer is yours to choose. <span class="mark">We build it and run it.</span></h2>
+      <p class="lede">From the GPUs up to the app on your staff's phones. Pick a layer to see what you decide and what Betopia does.</p>
+    </div>
+    <div class="stackx">
+      <div class="layers" role="tablist" aria-label="Layers" id="layers"><button type="button" class="lrow" role="tab" style="--k: #EF7F2C;" aria-selected="false"><span class="n dk">06</span><span><b>Layer 6 · Apps</b><small>Web app, mobile app, voice, kiosk, API. Under your name.</small></span></button><button type="button" class="lrow" role="tab" style="--k: #C8553D;" aria-selected="false"><span class="n">05</span><span><b>Layer 5 · Security and governance</b><small>SSO, roles, audit trail, data-loss guard, Betopia SOC.</small></span></button><button type="button" class="lrow" role="tab" style="--k: #D9A441;" aria-selected="false"><span class="n dk">04</span><span><b>Layer 4 · Agents and integration</b><small>Core banking, ERP, CRM, HR. Agents act, a person approves.</small></span></button><button type="button" class="lrow" role="tab" style="--k: #2E7D6B;" aria-selected="false"><span class="n">03</span><span><b>Layer 3 · Knowledge hub</b><small>PDFs, intranet, website, drives, email. Answers with sources.</small></span></button><button type="button" class="lrow" role="tab" style="--k: #2E336A;" aria-selected="true"><span class="n">02</span><span><b>Layer 2 · Models</b><small>Open models you own, tuned on your data. One gateway for all.</small></span></button><button type="button" class="lrow" role="tab" style="--k: #22264F;" aria-selected="false"><span class="n">01</span><span><b>Layer 1 · Infrastructure</b><small>Rent GPUs on QSor in Dhaka, or bring your own data centre.</small></span></button></div>
+      <article class="ldetail" id="ldetail" role="tabpanel" aria-live="polite" style="--k: #2E336A;"><h3>Layer 2 · Models</h3>
+    <p class="lk you">You choose</p><ul><li>Open models: Llama, Qwen, DeepSeek</li><li>Bangla speech, Bangla OCR and embeddings</li><li>Commercial models only through your gateway and policy</li></ul>
+    <p class="lk we">Betopia builds and runs</p><ul><li>Tuning on your documents and your tone</li><li>One gateway: keys, logs, cost and fallback in one place</li><li>Switching the model with a setting, not a rebuild</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · your own ChatGPT -->
+<section class="section" id="chatgpt">
+  <div class="wrap split">
+    <div class="phone-wrap reveal" aria-hidden="true" style="transition-delay: 140ms;">
+      <div class="phone">
+        <div class="ph-bar"><img src="beto-sh/assets/icon/beto-icon-256.png" alt="" width="34" height="34"><div><b>Beto</b><small>Private · answers from your hub</small></div></div>
+        <div class="ph-body">
+          <p class="bub them">Hi Nusrat. I'm your company's private AI. What do you need today?</p>
+          <p class="bub me">What is our inward remittance limit for a single customer?</p>
+          <p class="bub them">The remittance circular sets a daily limit per customer, with a higher limit for verified accounts.<small>Source: Remittance policy, section 4</small></p>
+          <p class="bub me">Draft a two-line note for the branch managers.</p>
+          <p class="bub them typing"><i></i><i></i><i></i></p>
+        </div>
+        <div class="ph-in"><span>Ask Beto…</span><i></i></div>
+      </div>
+      <div class="sso"><span class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2.5"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></span><div><b>Sign in with company SSO</b><small>Your chats stay inside your organisation</small></div></div>
+    </div>
+    <div class="split-copy">
+      <div class="head reveal" style="transition-delay: 210ms;">
+        <p class="kicker"><span class="dot"></span>Use case · Your own ChatGPT</p>
+        <h2>A ChatGPT for your staff, <span class="mark">with your name on it.</span></h2>
+        <p class="lede">Ask, draft, summarise and translate in Bangla and English. On the web and on every phone. Nothing typed leaves your walls.</p>
+      </div>
+      <ul class="ticks reveal" style="transition-delay: 0ms;">
+        <li>Your logo, your colours, your app on iOS and Android</li>
+        <li>Sign in with your company account</li>
+        <li>Every chat stays inside your organisation</li>
+        <li>Pia already does this for every Betopian</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · company knowledge hub -->
+<section class="section hubsec" id="hub">
+  <div class="wrap">
+    <div class="head reveal" style="transition-delay: 70ms;">
+      <p class="kicker"><span class="dot"></span>Use case · Company knowledge hub</p>
+      <h2>Every document your company has written. <span class="mark">One AI that has read them all.</span></h2>
+      <p class="lede">PDFs, circulars, policies, the website, the intranet, shared drives and email. A manager no longer has to remember which document says what. It answers employees and customers, and keeps the private parts private.</p>
+    </div>
+    <div class="hubflow reveal" style="transition-delay: 140ms;">
+      <ul class="srcs">
+        <li><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5"></path></svg>PDFs and circulars</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>Website and intranet</li>
+        <li><svg viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"></path></svg>Shared drives</li>
+        <li><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>Email and tickets</li>
+        <li><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>ERP and CRM records</li>
+      </ul>
+      <div class="core">
+        <span class="flow in" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="orb"><img src="beto-sh/assets/icon/beto-icon-256.png" alt="" width="72" height="72"><b>Knowledge hub</b><small>answers with sources</small></div>
+        <span class="flow out" aria-hidden="true"><i></i><i></i><i></i></span>
+      </div>
+      <div class="auds">
+        <div class="aud a1"><b>Employees</b><span>Policies, procedures, HR, product sheets. By role: a teller sees what a teller needs.</span></div>
+        <div class="aud a2"><b>Customers and the public</b><span>Only what you mark as public. Nothing internal is ever shown.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · where it runs -->
+<section class="section tint" id="runs">
+  <div class="wrap">
+    <div class="head reveal" style="transition-delay: 210ms;">
+      <p class="kicker"><span class="dot"></span>Where it runs</p>
+      <h2>Rent it, or bring your own. <span class="mark">The AI is the same.</span></h2>
+      <p class="lede">Start on dedicated QSor GPUs in Dhaka and move into your own data centre later. Your knowledge, models and settings move with you.</p>
+    </div>
+    <div class="runs">
+      <article class="run reveal" style="--k: var(--orange-2); transition-delay: 0ms;"><img class="run-img" src="beto-sh/assets/images/run-hosted.webp" alt="Rows of GPU servers inside a locked single-tenant cage in a data centre" width="1200" height="896" loading="lazy" decoding="async"><div class="rt"><span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="6" rx="1.5"></rect><rect x="4" y="11" width="16" height="6" rx="1.5"></rect><path d="M8 6h.01M8 14h.01M12 21h-0M9 21h6"></path></svg></span><em>Fastest start</em></div><h3>Hosted private</h3><dl><div><dt>Where data lives</dt><dd>QSor, inside Bangladesh</dd></div><div><dt>Who holds the keys</dt><dd>You</dd></div><div><dt>Hardware</dt><dd>Dedicated GPUs, single tenant</dd></div><div><dt>Who runs it</dt><dd>Betopia</dd></div></dl></article>
+      <article class="run reveal" style="--k: var(--river); transition-delay: 70ms;"><img class="run-img" src="beto-sh/assets/images/run-cloud.webp" alt="A glowing private cloud wrapped in a ring of gold light" width="1200" height="896" loading="lazy" decoding="async"><div class="rt"><span class="ic"><svg viewBox="0 0 24 24"><path d="M7 18a5 5 0 1 1 1.2-9.9A6 6 0 0 1 19.5 10 4 4 0 0 1 18 18z"></path></svg></span><em>Your tenancy</em></div><h3>Your cloud</h3><dl><div><dt>Where data lives</dt><dd>Your cloud account</dd></div><div><dt>Who holds the keys</dt><dd>You</dd></div><div><dt>Hardware</dt><dd>Your cloud, or QSor endpoints in your private network</dd></div><div><dt>Who runs it</dt><dd>Betopia, or your team with us</dd></div></dl></article>
+      <article class="run reveal" style="--k: var(--ink); transition-delay: 140ms;"><img class="run-img" src="beto-sh/assets/images/run-dc.webp" alt="A server room behind a half-open vault door inside a company building" width="1200" height="896" loading="lazy" decoding="async"><div class="rt"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></span><em>Inside your walls</em></div><h3>Your data centre</h3><dl><div><dt>Where data lives</dt><dd>Your building</dd></div><div><dt>Who holds the keys</dt><dd>You</dd></div><div><dt>Hardware</dt><dd>Your servers and GPUs</dd></div><div><dt>Who runs it</dt><dd>Your team, with Betopia's support</dd></div></dl></article>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · industries -->
+<section class="section" id="industries">
+  <div class="wrap">
+    <div class="head reveal" style="transition-delay: 210ms;">
+      <p class="kicker"><span class="dot"></span>Built for regulated organisations</p>
+      <h2>Where the rules are strict, <span class="mark">private AI pays first.</span></h2>
+    </div>
+    <div class="inds2">
+      <article class="ind reveal" style="transition-delay: 0ms;"><img src="beto-sh/assets/images/ind-bank.webp" alt="A bank officer helps a customer at a branch counter, holding a tablet" width="1200" height="805" loading="lazy" decoding="async"><b>Banks and MFS</b><span>Policy answers for branch staff, credit memo drafts, KYC document checks, customer help in Bangla.</span></article>
+      <article class="ind reveal" style="transition-delay: 70ms;"><img src="beto-sh/assets/images/ind-telecom.webp" alt="A telecom engineer checks his phone beside a mobile tower on a Dhaka rooftop at dusk" width="1200" height="805" loading="lazy" decoding="async"><b>Telecom</b><span>Plan and tariff answers, ticket triage, guides for field teams.</span></article>
+      <article class="ind reveal" style="transition-delay: 140ms;"><img src="beto-sh/assets/images/ind-government.webp" alt="A government officer works at a tidy desk with files and a laptop" width="1200" height="805" loading="lazy" decoding="async"><b>Government</b><span>Circulars and service rules for officers, citizen help desks.</span></article>
+      <article class="ind reveal" style="transition-delay: 210ms;"><img src="beto-sh/assets/images/ind-healthcare.webp" alt="A nurse helps a patient and his daughter at a hospital front desk" width="1200" height="805" loading="lazy" decoding="async"><b>Healthcare</b><span>Doctor rosters, patient questions, report summaries.</span></article>
+      <article class="ind reveal" style="transition-delay: 0ms;"><img src="beto-sh/assets/images/ind-rmg.webp" alt="A floor supervisor with a tablet on a bright garment factory floor" width="1200" height="805" loading="lazy" decoding="async"><b>Manufacturing and RMG</b><span>Buyer specs, compliance documents, LC and shipping papers.</span></article>
+      <article class="ind reveal" style="transition-delay: 70ms;"><img src="beto-sh/assets/images/ind-conglomerate.webp" alt="Executives walk through the lobby of a corporate headquarters in Gulshan" width="1200" height="805" loading="lazy" decoding="async"><b>Conglomerates</b><span>One hub for every company in the group, kept apart by role.</span></article>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · we run on it ourselves -->
+<section class="section dark proofx" id="proof">
+  <div class="wrap proofx-in">
+    <div class="stage proof-stage" id="st-proof" role="button" tabindex="0" aria-label="Beto. Tap to say hello."><img class="still" src="beto-sh/assets/beto/beto-front.webp" alt="" loading="lazy"></div>
+    <div>
+      <div class="head reveal" style="transition-delay: 140ms;">
+        <p class="kicker"><span class="dot"></span>Proof, not a promise</p>
+        <h2>We run Betopia <span class="mark">on it first.</span></h2>
+        <p class="lede">Beto is Betopia's own private AI. He answers for the company in Bangla and English, in every country Betopia works in. Every client AI starts from what we learned running ours.</p>
+      </div>
+      <ul class="agents reveal" style="transition-delay: 210ms;">
+        <li><img src="beto-sh/assets/icon/beto-icon-256.png" alt="" width="40" height="40"><b>Beto</b><span>Betopia's AI for customers and partners</span><a href="/beto/">Meet Beto →</a></li>
+        <li><img src="beto-sh/assets/logo/pia-mark.svg" alt="" width="40" height="40"><b>Pia</b><span>Every Betopian's own ChatGPT</span></li>
+        <li><img src="beto-sh/assets/logo/mando-mark.svg" alt="" width="40" height="40"><b>Mando</b><span>The engineers' agent</span></li>
+        <li><span class="jm">J</span><b>Joya</b><span>AI receptionist on a kiosk</span></li>
+      </ul>
+      <ul class="creds reveal" style="transition-delay: 0ms;"><li>ISO 27001</li><li>ISO 9001</li><li>ISO 22301</li><li>ISO 20000-1</li><li>Works in 6 countries</li></ul>
+      <a class="inpress reveal" href="/press/" data-cta="" style="transition-delay: 70ms;"><span>In the news</span><b>The Business Standard</b><b lang="bn">কালের কণ্ঠ</b><b lang="bn">বাংলাদেশ প্রতিদিন</b><b>The Times of Bangladesh</b><em>All 11 stories →</em></a>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · how an engagement runs -->
+<section class="section" id="engage">
+  <div class="wrap">
+    <div class="head reveal" style="transition-delay: 140ms;">
+      <p class="kicker"><span class="dot"></span>How an engagement runs</p>
+      <h2>Start with one department. <span class="mark">Grow from there.</span></h2>
+    </div>
+    <ol class="eng">
+      <li class="reveal" style="--k: var(--terra); transition-delay: 210ms;"><i>01</i><b>Briefing</b><span>One meeting with your CIO and CISO: goals, data, rules.</span></li>
+      <li class="reveal" style="--k: var(--gold); transition-delay: 0ms;"><i>02</i><b>Assessment</b><span>Your documents, systems, infrastructure and regulators, mapped.</span></li>
+      <li class="reveal" style="--k: var(--river); transition-delay: 70ms;"><i>03</i><b>Pilot</b><span>One use case, one department, on QSor or on your servers.</span></li>
+      <li class="reveal" style="--k: var(--ink-2); transition-delay: 140ms;"><i>04</i><b>Rollout</b><span>More teams, more sources, the mobile app under your name.</span></li>
+      <li class="reveal" style="--k: var(--orange-2); transition-delay: 210ms;"><i>05</i><b>Run and improve</b><span>We watch what it could not answer and teach it.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 11 · for your security team -->
+<section class="section tint" id="security">
+  <div class="wrap sec-in">
+    <div class="head reveal" style="transition-delay: 0ms;">
+      <p class="kicker"><span class="dot"></span>For your security team</p>
+      <h2>Your CISO will have questions. <span class="mark">We wrote the answers down.</span></h2>
+      <p class="lede">Data flow, encryption, access, audit, the model supply chain and incident response, in one brief your security team can review.</p>
+      <a class="btn" href="#plan" data-brief="">Request the security brief</a>
+    </div>
+    <figure class="dflow reveal" aria-label="How a question flows, all inside your boundary" style="transition-delay: 70ms;">
+      <figcaption>Your boundary</figcaption>
+      <ol>
+        <li><b>Your people</b><span>web and mobile</span></li>
+        <li><b>Your SSO</b><span>roles decide</span></li>
+        <li><b>Beto app</b><span>under your name</span></li>
+        <li><b>Knowledge hub and agents</b><span>with sources and approvals</span></li>
+        <li><b>Model gateway</b><span>keys, logs, cost</span></li>
+        <li><b>Open model</b><span>on QSor or your GPUs</span></li>
+      </ol>
+      <p class="audit">Every step written to the audit log</p>
+    </figure>
+  </div>
+</section>
+
+<!-- 12 · faq -->
+<section class="section" id="faq">
+  <div class="wrap faq">
+    <div class="head reveal" style="transition-delay: 140ms;">
+      <p class="kicker"><span class="dot"></span>Questions</p>
+      <h2>What CIOs <span class="mark">ask us first</span>.</h2>
+    </div>
+    <div class="qa">
+      <details class="reveal" style="transition-delay: 210ms;"><summary>Is our data used to train anyone else's AI?</summary><p>No. Your documents answer your people and your customers. That is all they do.</p></details>
+      <details class="reveal" style="transition-delay: 0ms;"><summary>Where does it run?</summary><p>On dedicated GPUs on QSor in Dhaka, in your own cloud, or on your own servers. We agree this in the first meeting, before anything is loaded.</p></details>
+      <details class="reveal" style="transition-delay: 70ms;"><summary>Which models does it use?</summary><p>Open models such as Llama, Qwen and DeepSeek, tuned on your knowledge, or a commercial model through your own gateway and policy. You can switch the model later without rebuilding the AI.</p></details>
+      <details class="reveal" style="transition-delay: 140ms;"><summary>Can we use our own GPUs?</summary><p>Yes. Or start on dedicated GPUs on QSor and move to your own later. Your knowledge and settings move with you.</p></details>
+      <details class="reveal" style="transition-delay: 210ms;"><summary>Who can see what?</summary><p>Your single sign-on and your roles decide. A teller sees what a teller needs, and every question and answer is logged.</p></details>
+      <details class="reveal" style="transition-delay: 0ms;"><summary>Does it speak Bangla?</summary><p>Bangla and English, typed or spoken, including Bangla written in English letters.</p></details>
+      <details class="reveal" style="transition-delay: 70ms;"><summary>What does it cost?</summary><p>It depends on where it runs, which models it uses and how many people use it. We scope it with you and put the price in writing.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · book a briefing -->
+<section class="section lf-sec planx" id="plan">
+  <div class="wrap plan">
+    <div class="plan-copy reveal" style="transition-delay: 140ms;">
+      <p class="kicker"><span class="dot"></span>Book a private AI briefing</p>
+      <h2>Tell us what your AI should do <span class="mark">first</span>.</h2>
+      <p class="lede">A person from Betopia reads every request and calls you back. Rather talk it through now? Beto can scope it with you in chat.</p>
+      <ul class="ticks"><li>One meeting with your CIO and CISO</li><li>A written plan: where it runs, which models, first use case</li><li>No price list: scoped with you, priced in writing</li></ul>
+      <button type="button" class="btn ghost" data-chat="private">Scope it with Beto</button>
+      <div class="stage cta-stage" id="st-cta" role="button" tabindex="0" aria-label="Beto waving. Tap to make him hop."><img class="still" src="beto-sh/assets/beto/beto-front.webp" alt="" loading="lazy"></div>
+    </div>
+    <div class="lead-card glass reveal" style="transition-delay: 210ms;">
+      <form id="lead-form" data-form-name="briefing" data-endpoint="/api/lead" data-thanks="Our team will call you on {phone}." novalidate="">
+        <div class="lead-head"><b>Request a briefing</b><span>Takes under a minute.</span></div>
+        <div class="lead-fields">
+          <label class="f"><span>Your name</span><input name="name" autocomplete="name" maxlength="120" required=""><small class="hint" aria-live="polite"></small></label>
+          <label class="f"><span>Organisation <i>optional</i></span><input name="company" autocomplete="organization" maxlength="160"></label>
+          <label class="f"><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01712 345678" maxlength="32" required=""><small class="hint" aria-live="polite"></small></label>
+          <label class="f"><span>Email</span><input name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" required=""><small class="hint" aria-live="polite"></small></label>
+          <fieldset class="f full"><legend>What are you interested in?</legend>
+            <div class="lead-chips">
+              <label><input type="radio" name="interest" value="private_cloud" checked=""><span>Private AI cloud</span></label>
+              <label><input type="radio" name="interest" value="own_chatgpt"><span>Own ChatGPT for staff</span></label>
+              <label><input type="radio" name="interest" value="knowledge_hub"><span>Company knowledge hub</span></label>
+              <label><input type="radio" name="interest" value="move_private"><span>Move our AI to private infrastructure</span></label>
+              <label><input type="radio" name="interest" value="unsure"><span>Something else</span></label>
+            </div>
+          </fieldset>
+          <label class="f full"><span>Your role, and where it should run <i>optional</i></span><textarea name="message" rows="3" maxlength="4000" placeholder="CIO at a bank. A knowledge hub for branch staff, on our own servers…"></textarea></label>
+          <label class="hp" aria-hidden="true">Leave this empty<input name="website_url" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <button class="btn lead-send" type="submit">Book my briefing</button>
+        <p class="lead-note">We use these details only to contact you about Betopia products.</p>
+      </form>
+      <div class="lead-done" hidden="" tabindex="-1" aria-live="polite">
+        <span class="ok"></span>
+        <h3>Thank you<span data-first=""></span></h3>
+        <p data-msg=""></p>
+        <button type="button" class="btn ghost" data-chat="private">Talk to Beto meanwhile</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="bfoot" data-cta-location="footer">
+  <div class="bf-bg" aria-hidden="true"><i class="glow"></i><i class="grid"></i></div>
+  <div class="wrap">
+    <div class="bf-cta">
+      <div>
+        <h2>Your own AI. <span class="bf-hl">Under your rules.</span></h2>
+        <p>Private, sovereign and made for you. Built and run by Betopia, on QSor GPUs in Dhaka or on your own servers.</p>
+      </div>
+      <div class="bf-btns">
+        <a class="bf-go" href="/#plan" data-cta=""><span class="bf-go-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 5.6L20 11l-5.6 2.4L12 19l-2.4-5.6L4 11l5.6-2.4z"></path></svg></span>Book a private AI briefing</a>
+        <a class="bf-ghost" href="/chat" data-cta="">Talk to Beto <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="bf-main">
+      <div class="bf-cols">
+        <nav aria-label="Private AI">
+          <p class="bf-k">Private AI</p>
+          <ul>
+            <li><a href="/#stack">The stack</a></li>
+            <li><a href="/#hub">Knowledge hub</a></li>
+            <li><a href="/#chatgpt">Your own ChatGPT</a></li>
+            <li><a href="/#runs">Where it runs</a></li>
+            <li><a href="/#industries">Industries</a></li>
+            <li><a href="/#security">For your CISO</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Beto">
+          <p class="bf-k">Beto</p>
+          <ul>
+            <li><a href="/beto/">Meet Beto</a></li>
+            <li><a href="/beto/#why">Why Beto exists</a></li>
+            <li><a href="/chat">Talk to Beto</a></li>
+            <li><a href="/chat?intent=private">Plan a private AI</a></li>
+            <li><a href="/beto/#samples">Sample company AIs</a></li>
+            <li><a href="/press/">Press</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="The family">
+          <p class="bf-k">The family</p>
+          <ul>
+            <li><a href="https://getbusinessbrain.ai" target="_blank" rel="noopener">Business Brain <i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://getjoya.ai" target="_blank" rel="noopener">Joya <i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://qsor.cloud" target="_blank" rel="noopener">QSor <i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://www.betopialimited.com/products" target="_blank" rel="noopener">All Betopia products <i aria-hidden="true">↗</i></a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Betopia">
+          <p class="bf-k">Betopia</p>
+          <ul>
+            <li><a href="https://www.betopialimited.com/about" target="_blank" rel="noopener">About</a></li>
+            <li><a href="https://www.betopialimited.com/global-reach/offices" target="_blank" rel="noopener">Offices</a></li>
+            <li><a href="https://www.betopialimited.com/partners" target="_blank" rel="noopener">Partners</a></li>
+            <li><a href="https://www.betopialimited.com/career" target="_blank" rel="noopener">Careers</a></li>
+            <li><a href="https://www.betopialimited.com/news" target="_blank" rel="noopener">News</a></li>
+            <li><a href="https://www.betopialimited.com/contact" target="_blank" rel="noopener">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <aside class="bf-beto" aria-label="Ask Beto">
+        <div class="bf-beto-top">
+          <span class="bf-av"><img src="beto-sh/assets/icon/beto-icon-256.png" alt="" width="64" height="64"></span>
+          <div><p class="bf-t">Ask Beto anything</p><p class="bf-s">Betopia's own AI, in <span lang="bn">বাংলা</span> and English, any hour.</p></div>
+        </div>
+        <a class="bf-ask" href="/chat" data-cta="">Start a chat <span aria-hidden="true">→</span></a>
+        <ul class="bf-contact">
+          <li><a href="mailto:sales@betopialimited.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>sales@betopialimited.com</a></li>
+          <li><a href="mailto:sales@betopialimited.com?subject=Press%20enquiry"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5"></path></svg>Press enquiries</a></li>
+        </ul>
+        <ul class="bf-certs" aria-label="Certifications"><li>ISO 27001</li><li>ISO 9001</li><li>ISO 22301</li><li>ISO 20000-1</li></ul>
+      </aside>
+    </div>
+
+    <div class="bf-legal">
+      <p>© Betopia Limited. Beto is Betopia Limited's own AI. Beto does not take tea breaks. We do, and we would like to have one with you.</p>
+      <nav aria-label="Legal">
+        <a href="https://www.betopialimited.com/privacy-policy" target="_blank" rel="noopener">Privacy</a>
+        <a href="https://www.betopialimited.com/terms-of-service" target="_blank" rel="noopener">Terms</a>
+        <a href="https://www.betopialimited.com/cookie-policy" target="_blank" rel="noopener">Cookies</a>
+        <a href="https://www.betopialimited.com/security" target="_blank" rel="noopener">Security</a>
+        <a href="/llms.txt">For AI assistants</a>
+      </nav>
+    </div>
+  </div>
+  <div class="bf-word" aria-hidden="true"><img src="beto-sh/assets/icon/beto-icon-256.png" alt="" width="256" height="256"><span>beto</span></div>
+</footer>
+
+<!-- the sticky bar on a phone, after the hero -->
+<div class="dockbar" id="dockbar">
+  <button type="button" class="btn ghost" data-chat="private">Talk to Beto</button>
+  <a class="btn" href="#plan">Book a briefing</a>
+</div>
+
+<!-- Ask Beto: the chat over the page -->
+<button type="button" class="launcher" id="launcher" data-chat="" aria-label="Talk to Beto"><img src="beto-sh/assets/icon/beto-icon-256.png" alt=""><span>Ask Beto</span></button>
+<div class="chatbox" id="chatbox" hidden="">
+  <div class="chatbox-in" role="dialog" aria-label="Chat with Beto" aria-modal="true">
+    <div class="chatbox-bar"><b>Beto</b><a href="/chat" id="chatFull">Open full chat</a><button type="button" class="x" id="chatClose" aria-label="Close chat"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+    <iframe id="chatFrame" title="Beto chat" allow="microphone; clipboard-write"></iframe>
+  </div>
+</div>
+
+<script type="module" src="beto-sh/home/enterprise.js"></script>
+<script type="module" src="beto-sh/js/lead-form.js"></script>
+<script defer src="beto-sh/js/motion.js"></script>
+<script type="module" src="static-cloudflareinsights-com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;bd9207fbe3374b568032a0a6d8e93e59&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+
+<canvas class="beto-canvas" aria-hidden="true" data-engine="three.js r160" width="1905" height="911"></canvas><grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration></body></html>
