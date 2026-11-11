@@ -65,12 +65,18 @@
 
   const io = new IntersectionObserver((list) => {
     for (const e of list) {
-      if (!e.isIntersecting) continue
-      e.target.classList.add('in')
-      io.unobserve(e.target)
+      e.target.classList.toggle('in', e.isIntersecting)
     }
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 })
   targets.forEach((el) => { el.classList.add('reveal'); el.style.transitionDelay = ''; io.observe(el) })
+
+  // modern reveal variants: scale / blur / slide / flip between sections
+  const variants = ['reveal-scale','reveal-blur','reveal-slide-left','reveal-slide-right','reveal-flip']
+  $$('.section').forEach((sec, si) => {
+    $$('.reveal', sec).forEach((el, i) => {
+      el.classList.add(variants[(si + i) % variants.length])
+    })
+  })
 
   // ---- progress bar and current section in the nav ---------------------------
   const bar = document.createElement('div')
@@ -155,19 +161,57 @@
     stage.addEventListener('animationend', () => stage.classList.remove('hop'))
   }
 
-  // the live private-AI conversation
+  // the live private-AI conversation: greets, then cycles through industries
   if (demo) {
-    const msgs = $$('.hero-message', demo)
-    msgs.forEach((m) => {
-      for (const n of [...m.childNodes]) {
-        if (n.nodeType !== 3 || !n.textContent.trim()) continue
-        const holder = document.createElement('span')
-        holder.textContent = n.textContent
-        n.replaceWith(holder)
-        splitWords(holder, 'dw')
-      }
-    })
+    const INDUSTRIES = [
+      {
+        name: 'Banking & MFS',
+        color: '#C8553D',
+        question: 'What can you do for banks and financial services?',
+        answer: 'I help with KYC document checks, credit memo drafts, policy answers for branch staff, and customer help in Bangla. Every answer is logged.',
+        source: 'KYC policy, section 2'
+      },
+      {
+        name: 'Telecom',
+        color: '#2E7D6B',
+        question: 'What are our current prepaid data packages?',
+        answer: 'We offer daily, weekly and monthly bundles with varying data volumes and validity. I can detail any specific package.',
+        source: 'Tariff catalog, 2026'
+      },
+      {
+        name: 'Government',
+        color: '#2E336A',
+        question: 'Summarise the latest service rules for officers.',
+        answer: 'The circular outlines leave entitlement, travel allowance, and conduct guidelines for all officers in your ministry.',
+        source: 'Service rules circular'
+      },
+      {
+        name: 'Healthcare',
+        color: '#A8432E',
+        question: 'What is the cardiology roster for next week?',
+        answer: 'Dr. Rahman and Dr. Ali are on duty Monday to Friday, with emergency coverage on weekends.',
+        source: 'Hospital roster'
+      },
+      {
+        name: 'Manufacturing & RMG',
+        color: '#8a6114',
+        question: 'Check buyer compliance requirements for our next shipment.',
+        answer: 'The buyer requires OEKO-TEX certification, wage records, and safety audit reports before shipment release.',
+        source: 'Compliance manual'
+      },
+      {
+        name: 'Conglomerates',
+        color: '#6B5B95',
+        question: 'Show me the finance dashboard for our textile subsidiary.',
+        answer: 'Here are the textile subsidiary figures: revenue, cost of goods, and inventory levels for Q3.',
+        source: 'Group ERP'
+      },
+    ]
+
+    let industryIndex = 0
+    let active = false
     const bar2 = $('.hero-demo-bar', demo)
+    const industryLabel = $('.hero-demo-bar p', demo)
     const replay = document.createElement('button')
     replay.type = 'button'
     replay.className = 'hero-replay'
@@ -177,11 +221,65 @@
 
     let timers = []
     const later = (fn, ms) => timers.push(setTimeout(fn, ms))
-    const play = () => {
+
+    const GREETING = "Hello! I'm Beto, your private AI assistant. I work inside your organisation's walls, in Bangla and English."
+
+    function clearMessages() {
+      $$('.hero-message', demo).forEach((m) => m.remove())
+    }
+
+    function buildMessages(ind) {
+      const frag = document.createDocumentFragment()
+
+      // 1 · Beto's greeting (left side)
+      const greet = document.createElement('div')
+      greet.className = 'hero-message ours'
+      greet.textContent = GREETING
+      frag.append(greet)
+
+      // 2 · User's question (right side)
+      const q = document.createElement('div')
+      q.className = 'hero-message theirs'
+      q.textContent = ind.question
+      frag.append(q)
+
+      // 3 · Beto's answer (left side)
+      const a = document.createElement('div')
+      a.className = 'hero-message ours'
+      a.innerHTML = ind.answer + (ind.source ? `<small>Source: ${ind.source}</small>` : '')
+      frag.append(a)
+
+      const bar = $('.hero-demo-bar', demo)
+      demo.insertBefore(frag, bar?.nextSibling || demo.firstChild)
+      return $$('.hero-message', demo)
+    }
+
+    function split(msgEl) {
+      for (const n of [...msgEl.childNodes]) {
+        if (n.nodeType !== 3 || !n.textContent.trim()) continue
+        const holder = document.createElement('span')
+        holder.textContent = n.textContent
+        n.replaceWith(holder)
+        splitWords(holder, 'dw')
+      }
+    }
+
+    function play() {
+      if (!active) return
       timers.forEach(clearTimeout)
       timers = []
       demo.classList.remove('done')
+      clearMessages()
+
+      const ind = INDUSTRIES[industryIndex]
+      industryIndex = (industryIndex + 1) % INDUSTRIES.length
+      if (industryLabel) industryLabel.innerHTML = `<span style="color:${ind.color};font-weight:700">${ind.name}</span> · <span style="color:${ind.color};font-weight:700">beto.your-organisation.ai</span>`
+      demo.style.setProperty('--hero-theme', ind.color)
+
+      const msgs = buildMessages(ind)
+      msgs.forEach(split)
       msgs.forEach((m) => m.classList.remove('on', 'pending'))
+
       let t = 450
       msgs.forEach((m) => {
         const ours = m.classList.contains('ours')
@@ -189,12 +287,33 @@
         if (ours) { t += 1100; later(() => m.classList.remove('pending'), t) }
         t += 1300
       })
-      later(() => demo.classList.add('done'), t)
+
+      const nextDelay = t + 2200
+      later(() => {
+        demo.classList.add('done')
+        setTimeout(play, 700)
+      }, nextDelay)
     }
-    replay.addEventListener('click', play)
+
+    replay.addEventListener('click', () => {
+      industryIndex = 0
+      active = true
+      play()
+    })
+
     let started = false
     new IntersectionObserver(([e], obs) => {
-      if (e.isIntersecting && !started) { started = true; later(play, 900); obs.disconnect() }
+      if (e.isIntersecting && !started) {
+        started = true
+        active = true
+        later(play, 900)
+        obs.disconnect()
+      }
     }, { threshold: 0.3 }).observe(demo)
+
+    addEventListener('visibilitychange', () => {
+      active = document.visibilityState === 'visible'
+      if (active) play()
+    })
   }
 })()

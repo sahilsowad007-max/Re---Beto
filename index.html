@@ -31,7 +31,7 @@
 <link rel="preconnect" href="fonts-gstatic-com/" crossorigin="">
 <link href="fonts-googleapis-com/css2" rel="stylesheet">
 <link rel="modulepreload" href="cdn-jsdelivr-net/npm/three@0.160.0/build/three.module.js">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="importmap">{"imports":{"three":"cdn-jsdelivr-net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <link rel="stylesheet" href="beto-sh/css/lead-form.css">
 <link rel="stylesheet" href="beto-sh/home/home.css">
 <link rel="stylesheet" href="beto-sh/home/enterprise.css">
@@ -152,9 +152,6 @@
   </div>
   <aside class="hero-demo" aria-label="Example private AI conversation">
     <div class="hero-demo-bar"><span></span><span></span><span></span><p>beto.your-organisation.ai</p></div>
-    <div class="hero-message theirs">What is our inward remittance limit for a single customer?</div>
-    <div class="hero-message ours">The remittance circular sets a daily limit per customer, with a higher limit for verified accounts.<small>Source: Remittance policy, section 4</small></div>
-    <div class="hero-message theirs bengali" lang="bn">বাংলায় সংক্ষেপে বলো</div>
     <div class="hero-demo-input">Ask Beto anything about your company <span>Private</span></div>
   </aside>
 </section>
@@ -536,6 +533,7 @@
 </div>
 
 <script type="module" src="beto-sh/home/enterprise.js"></script>
+<script type="module" src="beto-sh/js/hero-robot.js"></script>
 <script type="module" src="beto-sh/js/lead-form.js"></script>
 <script defer src="beto-sh/js/motion.js"></script>
 <script type="module" src="static-cloudflareinsights-com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;bd9207fbe3374b568032a0a6d8e93e59&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
