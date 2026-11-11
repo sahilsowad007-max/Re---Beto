@@ -317,3 +317,31 @@
     })
   }
 })()
+
+// ---- splash overlay: platform redesign reveal ----
+(function(){
+  const splash = document.getElementById('splash-overlay')
+  const splashEnter = document.getElementById('splash-enter')
+  const mainEl = document.querySelector('main')
+  const body = document.body
+
+  function closeSplash(){
+    if(!splash) return
+    splash.classList.add('exiting')
+    setTimeout(()=>{
+      splash.remove?.()
+      body.classList.remove('splash-open')
+      if(mainEl) mainEl.classList.remove('splash-hidden')
+      document.documentElement.classList.remove('splash-lock')
+    },700)
+  }
+
+  if(splash){
+    body.classList.add('splash-open')
+    document.documentElement.classList.add('splash-lock')
+    splashEnter?.addEventListener('pointerdown', closeSplash)
+    splashEnter?.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' ') closeSplash() })
+    // auto-close after 4.5s
+    setTimeout(closeSplash, 4500)
+  }
+})()

@@ -1,5 +1,22 @@
 <!DOCTYPE html>
 <html lang="en"><head></head><body class="ent" data-new-gr-c-s-check-loaded="14.1345.0" data-gr-ext-installed=""><plasmo-csui></plasmo-csui>
+
+<!-- Splash overlay: platform redesign reveal -->
+<div class="splash-overlay" id="splash-overlay">
+  <div class="splash-card">
+    <div class="splash-badge">Platform Redesign</div>
+    <h1 class="splash-title">Beto<span class="splash-mark">.</span></h1>
+    <p class="splash-sub">Private AI, sovereign infrastructure — redesigned.</p>
+    <div class="splash-credit">
+      <span class="splash-credit-label">Designed by</span>
+      <a class="splash-credit-link" href="https://sahilsowad007-max.github.io/Portfolio/" target="_blank" rel="noopener">Sahil Sowad</a>
+      <span class="splash-credit-role">· UX/UI Designer</span>
+    </div>
+    <a class="splash-portfolio-btn" href="https://sahilsowad007-max.github.io/Portfolio/" target="_blank" rel="noopener">View Portfolio →</a>
+    <button type="button" class="splash-btn" id="splash-enter">Enter Platform</button>
+  </div>
+</div>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!-- GA4 (G-801CGHDSQ5): consent defaults first, then the config and the tag, on beto.sh only. Events: /js/analytics.js -->
@@ -529,6 +546,26 @@
   <div class="chatbox-in" role="dialog" aria-label="Chat with Beto" aria-modal="true">
     <div class="chatbox-bar"><b>Beto</b><a href="/chat" id="chatFull">Open full chat</a><button type="button" class="x" id="chatClose" aria-label="Close chat"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
     <iframe id="chatFrame" title="Beto chat" allow="microphone; clipboard-write"></iframe>
+  </div>
+</div>
+
+<!-- Dummy chat interface: Ask Beto coming soon -->
+<div class="chat-dummy" id="chat-dummy" hidden>
+  <div class="chat-dummy-bar">
+    <b>Beto</b>
+    <button type="button" class="dummy-x" id="dummyClose" aria-label="Close chat"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="chat-dummy-body">
+    <div class="dummy-message ours dummy-big">
+      <span class="dummy-emoji">🤖</span>
+      Something brilliant is brewing…
+    </div>
+    <div class="dummy-message ours dummy-small">
+      Beto's private AI chat is getting dressed up for your organisation.
+    </div>
+  </div>
+  <div class="dummy-footer">
+    <span class="dummy-placeholder">Stay tuned…</span>
   </div>
 </div>
 

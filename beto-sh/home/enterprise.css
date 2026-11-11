@@ -216,6 +216,30 @@
 .planx .cta-stage{height:280px}
 .planx .lead-card{background:#fff;border:1px solid var(--line);box-shadow:0 40px 70px -46px rgba(34,38,79,.55)}
 
+/* ---- Ask Beto dummy chat: coming soon on the left ----------------------- */
+.chat-dummy{
+  position:fixed;z-index:55;width:min(340px,85vw);height:min(420px,60vh);border-radius:22px;background:#fff;border:1px solid var(--line);box-shadow:0 30px 60px -20px rgba(15,23,41,.35);overflow:hidden;display:flex;flex-direction:column;animation:rise .28s cubic-bezier(.2,.8,.2,1)
+}
+.chat-dummy.dummy-left{left:22px;bottom:calc(22px + env(safe-area-inset-bottom))}
+.chat-dummy.dummy-right{right:22px;bottom:calc(22px + env(safe-area-inset-bottom))}
+.chat-dummy-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:var(--paper);box-shadow:0 8px 16px -14px rgba(34,38,79,.5);position:relative;z-index:1}
+.chat-dummy-bar b{font-family:var(--display);font-size:15px}
+.chat-dummy-bar .dummy-x{width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
+.chat-dummy-bar .dummy-x:hover{background:var(--sand)}
+.chat-dummy-bar .dummy-x svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.chat-dummy-body{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;background:#fff}
+.dummy-message{max-width:80%;padding:12px 16px;border-radius:16px;font-size:15px;line-height:1.5;color:var(--ink)}
+.dummy-message.ours{align-self:flex-start;background:#F5F7FC;border-bottom-left-radius:4px;border-left:3px solid var(--hero-theme,var(--terra))}
+.dummy-message.dummy-big{font-size:18px;font-weight:700;letter-spacing:-.01em;align-self:center;max-width:90%}
+.dummy-emoji{display:block;font-size:28px;margin-bottom:6px;line-height:1}
+.dummy-message.dummy-small{font-size:13px;color:var(--slate);margin-top:-8px}
+.dummy-countdown{margin-top:auto;padding-top:10px;border-top:1px solid var(--line-2);display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.dummy-digits{font-family:var(--display);font-size:22px;font-weight:800;color:var(--terra)}
+.dummy-label{font-size:11px;color:var(--dim);letter-spacing:.08em}
+.dummy-footer{padding:10px 14px 12px;border-top:1px solid var(--line-2);display:flex;align-items:center;justify-content:space-between;background:#fff}
+.dummy-placeholder{font-size:13px;color:var(--dim);font-style:italic}
+.chat-dummy[hidden]{display:none}
+
 /* the launcher's face: the 3D icon on indigo, not a photo square */
 .launcher img{background:var(--ink-2);padding:3px}
 

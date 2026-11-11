@@ -209,3 +209,95 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 .nav.scrolled .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--white) 72%,transparent),color-mix(in srgb,var(--white) 42%,transparent))}
 .links a[aria-current="true"]{background:color-mix(in srgb,var(--white) 70%,transparent)}
 .nav .menu-btn{background:color-mix(in srgb,var(--white) 55%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+
+/* ---- splash overlay: platform redesign reveal ---- */
+.splash-overlay{
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
+  background:linear-gradient(135deg,#171B3B 0%,#2E336A 55%,#22264F 100%);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:opacity .7s cubic-bezier(.2,.8,.2,1),visibility .7s cubic-bezier(.2,.8,.2,1);
+}
+.splash-overlay.exiting{
+  opacity:0;visibility:hidden;pointer-events:none;
+}
+.splash-card{
+  position:relative;width:min(860px,88vw);max-height:min(620px,90vh);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:clamp(16px,3vw,28px);
+  padding:clamp(30px,5vw,60px) clamp(20px,4vw,40px);
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:34px;
+  box-shadow:0 40px 100px -30px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,0.2);
+  backdrop-filter:blur(32px) saturate(1.4);-webkit-backdrop-filter:blur(32px) saturate(1.4);
+  overflow:hidden;transform:scale(.9);opacity:0;
+  animation:splash-in 1s cubic-bezier(.2,.8,.2,1) .2s forwards;
+}
+.splash-card:hover{
+  transform:scale(1.02) rotateX(1deg) rotateY(-1deg);
+  border-color:rgba(247,149,73,.6);
+  box-shadow:0 55px 110px -35px rgba(0,0,0,.8),0 0 70px rgba(247,149,73,.18);
+}
+.splash-badge{
+  font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+  color:#F4C76A;display:inline-block;padding:7px 16px;border-radius:999px;
+  background:rgba(244,199,106,.12);border:1px solid rgba(244,199,106,.25);
+}
+.splash-title{font-family:var(--display);font-size:clamp(44px,9vw,80px);font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1.02;margin:0}
+.splash-title .splash-mark{color:#F79549}
+.splash-sub{font-size:clamp(15px,1.7vw,20px);color:#C9C6DA;line-height:1.7;margin:0;max-width:64ch}
+.splash-credit{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:center}
+.splash-credit-label{font-size:12px;font-weight:800;color:#8188A0;text-transform:uppercase;letter-spacing:.14em}
+.splash-credit-link{font-size:15px;font-weight:700;color:#fff;transition:color .2s}
+.splash-credit-link:hover{color:#F79549}
+.splash-credit-role{font-size:12px;color:#8188A0}
+.splash-portfolio-btn{
+  margin-top:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;padding:0 26px;border-radius:999px;
+  background:linear-gradient(135deg,#F4C76A,#F79549);color:#171B3B;
+  font-weight:800;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,filter .2s;
+  box-shadow:0 16px 32px -16px rgba(247,149,73,.45);text-decoration:none
+}
+.splash-portfolio-btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 22px 44px -20px rgba(247,149,73,.6)}
+.splash-btn{
+  margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:52px;padding:0 30px;border-radius:999px;background:#fff;color:#171B3B;
+  font-weight:800;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,filter .2s;
+  box-shadow:0 20px 40px -20px rgba(247,149,73,.5);
+}
+.splash-btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 28px 52px -24px rgba(247,149,73,.7)}
+.splash-btn:active{transform:none}
+.splash-glass-panel{
+  position:absolute;width:clamp(200px,35vw,360px);height:clamp(200px,35vw,360px);
+  border-radius:50%;background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  animation:splash-float 8s ease-in-out infinite;
+}
+.splash-glass-panel-2{width:clamp(140px,28vw,260px);height:clamp(140px,28vw,260px);top:12%;right:6%;animation-delay:-1.5s;border-color:rgba(247,149,73,.18);background:rgba(247,149,73,.02)}
+.splash-glass-panel-3{width:clamp(240px,42vw,320px);height:clamp(240px,42vw,320px);bottom:8%;right:-6%;animation-delay:-3.5s;border-color:rgba(46,125,107,.12);background:rgba(46,125,107,.015)}
+.splash-orbs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.splash-orbs::before,.splash-orbs::after{
+  content:"";position:absolute;border-radius:50%;filter:blur(48px);opacity:.55;animation:splash-orbs 7s ease-in-out infinite alternate
+}
+.splash-orbs::before{width:clamp(160px,22vw,240px);height:clamp(160px,22vw,240px);top:8%;left:8%;background:#F4C76A;animation-delay:-2s}
+.splash-orbs::after{width:clamp(200px,28vw,290px);height:clamp(200px,28vw,290px);bottom:3%;right:0;background:#F79549}
+@keyframes splash-in{
+  from{opacity:0;transform:scale(.82) translateY(16px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+@keyframes splash-float{
+  0%,100%{transform:translate(0,0)}
+  33%{transform:translate(14px,-10px)}
+  66%{transform:translate(-12px,16px)}
+}
+@keyframes splash-orbs{
+  0%{opacity:.45;transform:scale(1)}
+  100%{opacity:.9;transform:scale(1.2)}
+}
+
+/* page behind splash: blur + fade */
+.splash-open main{filter:blur(10px) saturate(.85);transition:filter .6s ease,opacity .6s ease}
+.splash-open main::before{
+  content:"";position:fixed;inset:0;z-index:-1;background:rgba(15,23,59,.35);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)
+}

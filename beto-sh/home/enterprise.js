@@ -171,6 +171,7 @@ document.addEventListener('click', (e) => {
 
 // ---- Ask Beto: the chat over the page ---------------------------------------
 const box = $('#chatbox')
+const dummy = $('#chat-dummy')
 const frame = $('#chatFrame')
 let lastFocus = null
 function openChat(intent) {
@@ -182,8 +183,27 @@ function openChat(intent) {
   document.body.style.overflow = 'hidden'
   setTimeout(() => $('#chatClose').focus(), 50)
 }
+function openDummy(btn) {
+  lastFocus = document.activeElement
+  dummy.classList.remove('dummy-left', 'dummy-right')
+  if (btn) {
+    const r = btn.getBoundingClientRect()
+    dummy.classList.add(r.right > innerWidth / 2 ? 'dummy-right' : 'dummy-left')
+  } else {
+    dummy.classList.add('dummy-left')
+  }
+  dummy.hidden = false
+  document.body.style.overflow = 'hidden'
+  setTimeout(() => $('#dummyClose').focus(), 50)
+}
+
 function closeChat() {
   box.hidden = true
+  document.body.style.overflow = ''
+  lastFocus?.focus?.()
+}
+function closeDummy() {
+  dummy.hidden = true
   document.body.style.overflow = ''
   lastFocus?.focus?.()
 }
@@ -192,13 +212,17 @@ document.addEventListener('click', (e) => {
   if (!b) return
   e.preventDefault()
   menu(false)
+  if (!b.dataset.chat) { openDummy(b); return }
   openChat(b.dataset.chat || '')
 })
 $('#chatClose').onclick = closeChat
+$('#dummyClose').onclick = closeDummy
 box.addEventListener('click', (e) => e.target === box && closeChat())
+dummy.addEventListener('click', (e) => e.target === dummy && closeDummy())
 addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return
   if (!box.hidden) closeChat()
+  else if (!dummy.hidden) closeDummy()
   else menu(false)
 })
 phone.addEventListener('change', () => menu(false))
