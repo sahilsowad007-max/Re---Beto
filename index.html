@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<style>html{background:#F3F5FC}</style>
-
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!-- GA4 (G-801CGHDSQ5): consent defaults first, then the config and the tag, on beto.sh only. Events: /js/analytics.js -->
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'],wait_for_update:500});gtag('set','ads_data_redaction',true);if(location.hostname==='beto.sh'){gtag('js',new Date());gtag('config','G-801CGHDSQ5');var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id=G-801CGHDSQ5';document.head.appendChild(g);}</script>
@@ -13,7 +11,7 @@
 <link rel="icon" href="beto-sh/assets/icon/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="beto-sh/assets/icon/apple-touch-icon.png">
 <link rel="manifest" href="beto-sh/site.webmanifest">
-<link rel="canonical" href="beto-sh/">
+<link rel="canonical" href="https://beto.sh/">
 <link rel="alternate" type="text/markdown" title="Guide for AI assistants" href="beto-sh/llms.txt">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Beto">
@@ -30,7 +28,7 @@
 <meta name="twitter:image" content="https://beto.sh/assets/social/og-home.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300..800&family=Anek+Bangla:wght@400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <link rel="stylesheet" href="beto-sh/css/lead-form.css">
 <link rel="stylesheet" href="beto-sh/home/home.css">
@@ -109,7 +107,6 @@
 }
 </script>
 <link rel="stylesheet" href="beto-sh/css/footer.css">
-
 </head>
 <body class="ent">
 
@@ -137,11 +134,10 @@
   // Stop the browser restoring an old scroll offset under the splash.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
+  // Instant jump: html has scroll-behavior:smooth, which would animate it.
   function toTop(){
-    if (window.scrollY === 0 && root.scrollTop === 0 && body.scrollTop === 0) return
-    root.scrollTop = 0
-    body.scrollTop = 0
-    window.scrollTo(0, 0)
+    if (window.scrollY === 0) return
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }
 
   body.classList.add('splash-open')
@@ -153,37 +149,30 @@
     if (closed) return
     var splash = document.getElementById('splash-overlay')
     closed = true
-    if (!splash) { body.classList.remove('splash-open'); root.classList.remove('splash-lock'); toTop(); return }
-
-    splash.classList.add('exiting')
     body.classList.remove('splash-open')
     root.classList.remove('splash-lock')
     // an incoming #hash must not drop the revealed page half way down
     if (location.hash) history.replaceState(null, '', location.pathname + location.search)
     toTop()
-
-    window.requestAnimationFrame(toTop)
-    setTimeout(function(){
-      if (splash.parentNode) splash.parentNode.removeChild(splash)
-      root.classList.remove('splash-lock')
-      body.classList.remove('splash-open')
-      toTop()
-    }, 700)
-    setTimeout(toTop, 900)
+    if (splash) {
+      splash.classList.add('exiting')
+      setTimeout(function(){ if (splash.parentNode) splash.parentNode.removeChild(splash) }, 700)
+    }
   }
 
   var btn = document.getElementById('splash-enter')
   if (btn) btn.addEventListener('click', reveal)
 
-  // Keep the page at the top while the splash is up: initial load, reloads,
-  // back/forward cache and any stray scroll attempt.
-  addEventListener('load', toTop)
-  addEventListener('pageshow', toTop)
+  // Pin the page to the top only while the splash is up. Once revealed nothing
+  // may touch the scroll position, or it yanks the page up under the reader.
+  addEventListener('load', function(){ if (!closed) toTop() })
+  addEventListener('pageshow', function(){ if (!closed) toTop() })
   addEventListener('scroll', function(){ if (!closed) toTop() }, { passive: true })
 
   window.__revealBeto = reveal
 })()
 </script>
+
 
 <a class="skip" href="#main">Skip to the page</a>
 
@@ -629,5 +618,4 @@
 <script type="module" src="beto-sh/home/enterprise.js"></script>
 <script type="module" src="beto-sh/js/lead-form.js"></script>
 <script defer src="beto-sh/js/motion.js"></script>
-
-<canvas class="beto-canvas" aria-hidden="true" data-engine="three.js r160" width="1905" height="911"></canvas></body></html>
+</body></html>

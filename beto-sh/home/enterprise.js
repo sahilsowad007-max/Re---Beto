@@ -7,7 +7,6 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)]
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
 const phone = matchMedia('(max-width: 620px)')
 const small = matchMedia('(max-width: 940px)').matches || (navigator.hardwareConcurrency || 8) <= 4
-if (!reduce) document.documentElement.classList.add('motion-ready')
 
 let cortex = null
 const stageRuntime = Promise.all([
@@ -43,11 +42,8 @@ const menu = (open) => {
 menuBtn.onclick = () => menu(!links.classList.contains('open'))
 links.addEventListener('click', (e) => e.target.closest('a') && menu(false))
 
-// ---- reveals --------------------------------------------------------------
-const io = new IntersectionObserver((list) => {
-  for (const e of list) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) }
-}, { rootMargin: '0px 0px -8% 0px' })
-$$('.reveal').forEach((el, i) => { el.style.transitionDelay = `${(i % 4) * 70}ms`; io.observe(el) })
+// Scroll reveals live in js/motion.js. A second observer here fought it over
+// the same elements (adding `in` while motion.js removed it), which flickered.
 
 // ---- the stack explorer ------------------------------------------------------
 const STACK = [
