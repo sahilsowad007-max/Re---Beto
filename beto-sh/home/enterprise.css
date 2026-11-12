@@ -611,3 +611,26 @@
 .hub-stage{position:relative;z-index:1;width:100%;flex:1 1 auto;min-height:0}
 .orb .hub-stage .still{width:auto;height:88%;margin:0;object-fit:contain}
 @media (max-width:720px){.core .orb{width:210px}}
+
+/* ---- Type system ----------------------------------------------------------------------------
+   Display: Sora (headlines, card titles, numbers). Text: Inter. Bangla falls back to Anek Bangla.
+   Scale: hero 78 > section 54 > card 22 > lede 18 > body 16.5 > label 12.5 caps.
+   Hierarchy comes from weight, size and colour together: ink headlines, one gradient accent phrase,
+   slate running text, small uppercase accent kickers. */
+:root{--sans:'Inter','Anek Bangla',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+body{font-size:16.5px;line-height:1.65}
+
+.xhero h1{font-size:clamp(40px,4.9vw,70px);font-weight:700;letter-spacing:-.05em;line-height:1}
+/* The accent phrase: the earlier light grey-blue, no gradient. */
+.xhero .glowtext{background:none;color:#747B93}
+.mark{background:none;color:#787F98}
+.dark .mark{color:#A9B2E0} /* lighter on the dark proof section so it stays readable */
+
+.head h2{max-width:18ch;font-size:clamp(32px,4vw,54px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:var(--ink)}
+.kicker,.head .kicker{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.lede{font-size:clamp(16.5px,1.35vw,18.5px);line-height:1.6;color:var(--slate);max-width:36em}
+.hero-aside>p:first-child{font-size:15.5px;line-height:1.6;color:var(--slate)}
+
+h3{font-weight:700;letter-spacing:-.025em}
+.pillar h3,.ldetail h3{font-size:24px}
+.run h3{font-size:21px}
