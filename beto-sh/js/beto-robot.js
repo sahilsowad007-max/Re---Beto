@@ -189,6 +189,7 @@ function mount(stage, cfg) {
   // that spiral in from the edges toward its chest.
   let glow, sparks, sparkAttr
   const SPARKS = 40, sparkSeed = []
+  const CYCLE = 9.5 // seconds per charge cycle (slow build, then a flash and a drain)
   if (cfg.charge) {
     const dotCanvas = document.createElement('canvas')
     dotCanvas.width = dotCanvas.height = 64
@@ -312,7 +313,7 @@ function mount(stage, cfg) {
       let flash = 0
       if (reduce) level = 0.55
       else {
-        const p = (t % 4.6) / 4.6 // charge up for 80% of the cycle, flash, then drain
+        const p = (t % CYCLE) / CYCLE // charge up for 80% of the cycle, flash, then drain
         level = p < 0.8 ? ease(p / 0.8) : 1 - ease((p - 0.8) / 0.2)
         flash = p >= 0.8 && p < 0.92 ? 1 - (p - 0.8) / 0.12 : 0
       }
@@ -326,7 +327,7 @@ function mount(stage, cfg) {
         sparks.material.opacity = 0.25 + level * 0.75
         for (let i = 0; i < SPARKS; i++) {
           const q = sparkSeed[i]
-          const u = (t * 0.22 * q.sp + q.ph) % 1 // 0 at the edge, 1 at the chest
+          const u = (t * 0.11 * q.sp + q.ph) % 1 // 0 at the edge, 1 at the chest
           const r = 3.6 * (1 - u) + 0.45, ang = q.a + u * 4.2
           sparkAttr.setXYZ(i, Math.cos(ang) * r, q.y * (1 - u) + 2.7 * u, Math.sin(ang) * r * 0.7)
         }
