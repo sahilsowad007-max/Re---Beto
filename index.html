@@ -17,35 +17,57 @@
   </div>
 </div>
 <script>
-/* Splash controller — self-contained so it always works, even if other scripts fail. */
+/* Splash controller — self-contained so it always works, even if other scripts fail.
+   Also pins the landing page to the very top, before and after the reveal. */
 (function(){
   var body = document.body, root = document.documentElement
+
+  // Stop the browser restoring an old scroll offset under the splash.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+
+  function toTop(){
+    if (window.scrollY === 0 && root.scrollTop === 0 && body.scrollTop === 0) return
+    root.scrollTop = 0
+    body.scrollTop = 0
+    window.scrollTo(0, 0)
+  }
+
   body.classList.add('splash-open')
   root.classList.add('splash-lock')
-  window.scrollTo(0, 0)
+  toTop()
 
   var closed = false
   function reveal(){
     if (closed) return
     var splash = document.getElementById('splash-overlay')
     closed = true
-    if (!splash) { body.classList.remove('splash-open'); root.classList.remove('splash-lock'); return }
+    if (!splash) { body.classList.remove('splash-open'); root.classList.remove('splash-lock'); toTop(); return }
 
     splash.classList.add('exiting')
     body.classList.remove('splash-open')
     root.classList.remove('splash-lock')
-    window.scrollTo(0, 0)
+    // an incoming #hash must not drop the revealed page half way down
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search)
+    toTop()
 
+    window.requestAnimationFrame(toTop)
     setTimeout(function(){
       if (splash.parentNode) splash.parentNode.removeChild(splash)
-      window.scrollTo(0, 0)
-      document.documentElement.classList.remove('splash-lock')
-      document.body.classList.remove('splash-open')
+      root.classList.remove('splash-lock')
+      body.classList.remove('splash-open')
+      toTop()
     }, 700)
+    setTimeout(toTop, 900)
   }
 
   var btn = document.getElementById('splash-enter')
   if (btn) btn.addEventListener('click', reveal)
+
+  // Keep the page at the top while the splash is up: initial load, reloads,
+  // back/forward cache and any stray scroll attempt.
+  addEventListener('load', toTop)
+  addEventListener('pageshow', toTop)
+  addEventListener('scroll', function(){ if (!closed) toTop() }, { passive: true })
 
   window.__revealBeto = reveal
 })()
