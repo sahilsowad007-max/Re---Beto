@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head></head><body class="ent" data-new-gr-c-s-check-loaded="14.1345.0" data-gr-ext-installed=""><plasmo-csui></plasmo-csui>
+<html lang="en"><head><meta charset="utf-8"></head><body class="ent" data-new-gr-c-s-check-loaded="14.1345.0" data-gr-ext-installed=""><plasmo-csui></plasmo-csui>
 
 <!-- Splash overlay: platform redesign reveal -->
 <div class="splash-overlay" id="splash-overlay">
@@ -13,11 +13,53 @@
       <span class="splash-credit-role">· UX/UI Designer</span>
     </div>
     <a class="splash-portfolio-text" href="https://sahilsowad007-max.github.io/Portfolio/" target="_blank" rel="noopener">sahilsowad007-max.github.io/Portfolio/</a>
-    <button type="button" class="splash-btn" id="splash-enter">Enter Platform</button>
+    <button type="button" class="splash-btn" id="splash-enter">Reveal now</button>
   </div>
 </div>
+<script>
+/* Splash controller — self-contained so it always works, even if other scripts fail. */
+(function(){
+  var body = document.body, root = document.documentElement
+  body.classList.add('splash-open')
+  root.classList.add('splash-lock')
+  window.scrollTo(0, 0)
 
-<meta charset="utf-8">
+  var closed = false
+  function reveal(){
+    if (closed) return
+    var splash = document.getElementById('splash-overlay')
+    closed = true
+    if (!splash) { body.classList.remove('splash-open'); root.classList.remove('splash-lock'); return }
+
+    splash.classList.add('exiting')
+    body.classList.remove('splash-open')
+    root.classList.remove('splash-lock')
+    window.scrollTo(0, 0)
+
+    setTimeout(function(){
+      if (splash.parentNode) splash.parentNode.removeChild(splash)
+      window.scrollTo(0, 0)
+      document.documentElement.classList.remove('splash-lock')
+      document.body.classList.remove('splash-open')
+    }, 700)
+  }
+
+  var btn = document.getElementById('splash-enter')
+  if (btn) btn.addEventListener('click', reveal)
+
+  var overlay = document.getElementById('splash-overlay')
+  if (overlay) overlay.addEventListener('click', function(e){ if (e.target === overlay) reveal() })
+
+  document.addEventListener('keydown', function(e){
+    if (closed) return
+    if (e.key === 'Escape') reveal()
+  })
+
+  window.__revealBeto = reveal
+  setTimeout(reveal, 4500)
+})()
+</script>
+
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!-- GA4 (G-801CGHDSQ5): consent defaults first, then the config and the tag, on beto.sh only. Events: /js/analytics.js -->
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'],wait_for_update:500});gtag('set','ads_data_redaction',true);if(location.hostname==='beto.sh'){gtag('js',new Date());gtag('config','G-801CGHDSQ5');var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id=G-801CGHDSQ5';document.head.appendChild(g);}</script><script async="" src="www-googletagmanager-com/gtag/js"></script>
@@ -48,7 +90,7 @@
 <link rel="preconnect" href="fonts-gstatic-com/" crossorigin="">
 <link href="fonts-googleapis-com/css2" rel="stylesheet">
 <link rel="modulepreload" href="cdn-jsdelivr-net/npm/three@0.160.0/build/three.module.js">
-<script type="importmap">{"imports":{"three":"cdn-jsdelivr-net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="importmap">{"imports":{"three":"./cdn-jsdelivr-net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <link rel="stylesheet" href="beto-sh/css/lead-form.css">
 <link rel="stylesheet" href="beto-sh/home/home.css">
 <link rel="stylesheet" href="beto-sh/home/enterprise.css">

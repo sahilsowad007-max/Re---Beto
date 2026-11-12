@@ -32,8 +32,11 @@ function createRobot(m) {
   const robot = new THREE.Group()
   robot.position.set(0.55, -0.3, 0) // stage right, where Beto stands
 
-  // ---- floor (shadow receiver) ----
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(9, 9, 32, 32), m.floor)
+  // ---- floor (transparent shadow catcher) ----
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(9, 9, 32, 32),
+    new THREE.ShadowMaterial({ color: 0x1f2a44, opacity: 0.16 })
+  )
   ground.rotation.x = -Math.PI / 2
   ground.position.y = -1.78
   ground.receiveShadow = true
@@ -69,9 +72,10 @@ function createRobot(m) {
   face.position.z = 0.34
   head.add(face)
 
-  visor = new THREE.Mesh(new THREE.PlaneGeometry(0.56, 0.34, 16, 12), m.visor)
+  const visor = new THREE.Mesh(new THREE.PlaneGeometry(0.56, 0.34, 16, 12), m.visor)
   visor.position.z = 0.341
   head.add(visor)
+  robot.userData.visor = visor
 
   const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.065, 32, 32), m.eye)
   eyeL.position.set(-0.19, 0.11, 0.47)
@@ -133,9 +137,35 @@ function createRobot(m) {
   return robot
 }
 
+function envTexture() {
+  // Soft studio gradient used as an environment so the metal surfaces pick up
+  // reflections instead of rendering flat grey. Generated locally: no network.
+  const c = document.createElement('canvas')
+  c.width = 512; c.height = 256
+  const g = c.getContext('2d')
+  const grad = g.createLinearGradient(0, 0, 0, 256)
+  grad.addColorStop(0.00, '#ffffff')
+  grad.addColorStop(0.38, '#eef2fb')
+  grad.addColorStop(0.52, '#cfd8ea')
+  grad.addColorStop(0.72, '#9aa6bf')
+  grad.addColorStop(1.00, '#6d7891')
+  g.fillStyle = grad
+  g.fillRect(0, 0, 512, 256)
+  g.fillStyle = 'rgba(247,149,73,0.55)'
+  g.beginPath(); g.arc(392, 96, 46, 0, Math.PI * 2); g.fill()
+  g.fillStyle = 'rgba(125,249,255,0.35)'
+  g.beginPath(); g.arc(120, 132, 38, 0, Math.PI * 2); g.fill()
+
+  const tex = new THREE.CanvasTexture(c)
+  tex.mapping = THREE.EquirectangularReflectionMapping
+  tex.colorSpace = THREE.SRGBColorSpace
+  return tex
+}
+
 function buildScene() {
   scene = new THREE.Scene()
   scene.fog = new THREE.FogExp2(0xf3f5fc, 0.04)
+  scene.environment = envTexture()
 
   camera = new THREE.PerspectiveCamera(40, 1, 0.1, 60)
   camera.position.set(3.4, 2.5, 6.5)
@@ -150,7 +180,13 @@ function buildScene() {
   sun.position.set(4, 7, 4)
   sun.castShadow = true
   sun.shadow.mapSize.set(2048, 2048)
-  sun.shadow.camera.set(-7, 7, 7, -7)
+  sun.shadow.camera.left = -7
+  sun.shadow.camera.right = 7
+  sun.shadow.camera.top = 7
+  sun.shadow.camera.bottom = -7
+  sun.shadow.camera.near = 0.5
+  sun.shadow.camera.far = 30
+  sun.shadow.camera.updateProjectionMatrix()
   sun.shadow.bias = -0.0005
   scene.add(sun)
 
@@ -235,7 +271,7 @@ function frame(t) {
 
   // visor: breath, pointer brightness, happy pulse after a tap
   const visorIntensity = 3.5 + Math.sin(sec * 2) * 0.4 + Math.hypot(aim.x, aim.y) * 1.2
-  visor.emissiveIntensity = Date.now() < happyUntil ? visorIntensity + 2.2 : visorIntensity
+  robot.userData.visor.emissiveIntensity = Date.now() < happyUntil ? visorIntensity + 2.2 : visorIntensity
 
   // camera drifts slightly toward where the user is looking
   camera.lookAt(0.55 + aim.x * 0.9, 0.35 + aim.y * 0.5, 0)

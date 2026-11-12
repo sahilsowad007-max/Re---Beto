@@ -31,7 +31,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .stage{position:relative;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
 .stage .still{display:block;position:absolute;left:50%;bottom:6%;height:86%;width:auto;transform:translateX(-50%);pointer-events:none}
 .stage.rendered .still{display:none}
-.stage.fallback .still,.no-webgl .stage .still{display:block}
+.stage.fallback .still,.no-webgl .stage:not(.rendered) .still{display:block}
 
 /* type */
 .kicker{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--terra)}
