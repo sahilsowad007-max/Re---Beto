@@ -81,6 +81,26 @@ function mount(stage, cfg) {
   }
   const ring = (parent, r, y, mat, x = 0) => add(parent, new THREE.CylinderGeometry(r + 0.025, r + 0.025, 0.11, 40), mat, x, y, 0)
 
+  // A finger is a chain of capsule segments (phalanges) joined at knuckles. `root` sits at the
+  // base knuckle; joints[k].rotation.x curls segment k toward the palm (negative = toward the viewer).
+  // `base` is the resting curl of each joint in radians.
+  function finger(r, segs, base) {
+    const root = new THREE.Group()
+    const joints = [root]
+    let parent = root
+    segs.forEach((len, k) => {
+      add(parent, new THREE.CapsuleGeometry(r * (1 - k * 0.09), len, 4, 10), slate, 0, -len / 2, 0)
+      if (k < segs.length - 1) {
+        const j = new THREE.Group()
+        j.position.y = -len
+        parent.add(j)
+        joints.push(j)
+        parent = j
+      }
+    })
+    return { root, joints, base }
+  }
+
   const robot = new THREE.Group()
   scene.add(robot)
 
@@ -110,7 +130,8 @@ function mount(stage, cfg) {
     const arm = new THREE.Group()
     arm.position.set(s * 1.28, 0, 0)
     arm.rotation.z = s * 0.04
-    arms.push({ arm, s })
+    const entry = { arm, s, fingers: [] }
+    arms.push(entry)
     torso.add(arm)
     add(torso, new THREE.SphereGeometry(0.4, 32, 24), slate, s * 1.12, 2.75, 0)
     add(arm, new THREE.CylinderGeometry(0.27, 0.27, 1.2, 32), slate, 0, 2.05, 0)
@@ -120,7 +141,32 @@ function mount(stage, cfg) {
     ring(arm, 0.27, 1.8, orange)
     ring(arm, 0.27, 1.67, cream)
     ring(arm, 0.27, 1.54, orange)
-    add(arm, rbox(0.3, 0.55, 0.32, 0.12, 8), slate, 0, 1.2, 0).rotation.z = -s * 0.08
+    // Hand, built like a human one: a palm, four fingers (index to pinky, middle longest, pinky
+    // shortest, three phalanges each in the usual 45/32/23% proportions) and a two-joint thumb.
+    // Hanging at the side, the thumb is on the inner (body) side and the pinky on the outer side.
+    const hand = new THREE.Group()
+    hand.position.set(0, 1.47, 0)
+    hand.scale.setScalar(0.85)
+    arm.add(hand)
+    add(hand, rbox(0.44, 0.34, 0.26, 0.12, 8), slate, 0, -0.12, 0)
+    // Handedness: the fingers curl toward +z (the palm side). With the palm facing +z and the
+    // fingers pointing down, a real hand has its thumb on the OUTER side (away from the body) and
+    // its pinky on the inner side, for the left and the right hand alike (s = +1 is the screen's
+    // right, which is the robot's left hand). hand.rotation.y then rolls the palm toward the body.
+    entry.hand = hand
+    add(hand, new THREE.SphereGeometry(0.1, 16, 12), slate, s * 0.17, -0.1, 0.06) // thumb pad
+    ;[[0.33, 0.12], [0.37, 0.12], [0.34, 0.13], [0.27, 0.15]].forEach(([L, c], i) => {
+      const f = finger(i === 3 ? 0.042 : 0.047, [L * 0.45, L * 0.32, L * 0.23], [c, c * 2.4, c * 1.7])
+      f.i = i
+      f.root.position.set(s * (0.15 - i * 0.1), -0.27, 0.01) // index on the outer side, pinky inner
+      hand.add(f.root)
+      entry.fingers.push(f)
+    })
+    const thumb = finger(0.056, [0.13, 0.11], [0.25, 0.5])
+    thumb.thumb = true
+    thumb.root.position.set(s * 0.2, -0.08, 0.07)
+    hand.add(thumb.root)
+    entry.fingers.push(thumb)
   }
 
   // Neck
@@ -213,7 +259,7 @@ function mount(stage, cfg) {
     arm.rotation.z = a
     arm.position.set(s * 1.2 + ox * c - oy * n, PIVOT_Y + ox * n + oy * c, 0)
   }
-  const waver = arms.find((x) => x.s === 1)
+  const waver = arms.find((x) => x.s === -1) // the robot's right hand (screen left), as people wave
 
   // Wave once when the page is revealed (the splash covers the hero until then).
   const WAVE = { raise: 0.5, hold: 2.4, lower: 0.6 }
@@ -289,7 +335,26 @@ function mount(stage, cfg) {
       }
       robot.scale.setScalar(1 + flash * 0.035)
     }
-    for (const x of arms) setArm(x, x.s * (0.04 + level * 0.6) + (x === waver ? wave : 0))
+    for (const x of arms) {
+      setArm(x, x.s * (0.04 + level * 0.6 + (x === waver ? wave : 0)))
+      // Hands relax with a gentle curl, open flat (fingers spread) while waving, and clench into
+      // fists as the charge builds.
+      const wv = x === waver ? waving : 0
+      const mul = (1 - wv * 0.85) * (cfg.charge ? 1 + level * 2.4 : 1)
+      const spread = 0.05 + wv * 0.2
+      // palm turns toward the body at rest and to the viewer while waving
+      x.hand.rotation.y = -x.s * 1.25 * (1 - wv)
+      for (const f of x.fingers) {
+        if (f.thumb) {
+          f.root.rotation.z = x.s * (0.5 + wv * 0.4)
+          f.root.rotation.x = -(0.4 + f.base[0] * mul)
+          f.joints[1].rotation.x = -f.base[1] * mul
+        } else {
+          f.root.rotation.z = (1.5 - f.i) * spread * x.s
+          f.joints.forEach((j, k) => { j.rotation.x = -f.base[k] * mul })
+        }
+      }
+    }
     if (waving) look.tx *= 1 - waving * 0.5 // keep the face toward the viewer while waving
     const k = 1 - Math.exp(-dt * 6)
     look.x += (look.tx - look.x) * k
