@@ -25,11 +25,11 @@
 /* links and the Ask Beto panel */
 .bf-main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,72px);padding:clamp(40px,5vw,56px) 0}
 .bf-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
-.bf-k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,238,224,.42)}
+.bf-k{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,238,224,.42)}
 .bf-cols ul{list-style:none;margin-top:12px}
 .bf-cols a{display:inline-flex;align-items:center;gap:6px;min-height:36px;font-size:15px;color:rgba(246,238,224,.78);transition:color .15s}
 .bf-cols a:hover{color:#fff}
-.bf-cols a i{font-style:normal;font-size:12px;color:rgba(246,238,224,.4)}
+.bf-cols a i{font-style:normal;font-size:13px;color:rgba(246,238,224,.4)}
 .bf-beto{padding:22px;border-radius:24px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .bf-beto-top{display:flex;align-items:center;gap:14px}
 .bf-av{flex-shrink:0;width:64px;height:64px;border-radius:18px;overflow:hidden;background:#22264F;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 14px 30px -14px rgba(247,149,73,.6)}
@@ -43,7 +43,7 @@
 .bf-contact a:hover{color:#fff}
 .bf-contact svg{width:18px;height:18px;fill:none;stroke:#F79549;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bf-certs{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-.bf-certs li{padding:5px 10px;border-radius:999px;background:rgba(217,164,65,.12);border:1px solid rgba(217,164,65,.28);color:#F4D48E;font-size:12px;font-weight:700}
+.bf-certs li{padding:5px 10px;border-radius:999px;background:rgba(217,164,65,.12);border:1px solid rgba(217,164,65,.28);color:#F4D48E;font-size:13px;font-weight:700}
 
 /* legal */
 .bf-legal{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;padding:22px 26px;margin-bottom:8px;border-radius:20px;background:rgba(255,255,255,.04);font-size:13.5px;color:rgba(246,238,224,.5)}

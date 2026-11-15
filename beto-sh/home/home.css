@@ -7,7 +7,7 @@
    boxes from one fixed canvas. */
 :root{
   --paper:#F3F5FC; --cream:#EDF1FF; --sand:#E6EAF8; --white:#FFFFFF;
-  --ink:#171B3B; --ink-2:#2E336A; --slate:#555D79; --dim:#8188A0; --line:#E2E6F0; --line-2:#CCD3E3;
+  --ink:#171B3B; --ink-2:#2E336A; --slate:#555D79; --dim:#646B88; --line:#E2E6F0; --line-2:#CCD3E3;
   --orange:#F79549; --orange-2:#ef7f2c; --orange-ink:#A8432E; --peach:#F5D9C6;
   --terra:#C8553D; --gold:#D9A441; --gold-soft:#F1E1BC; --river:#2E7D6B; --river-soft:#D3E7DF; --terra-soft:#F5D9C6;
   --display:'Sora','Anek Bangla',system-ui,sans-serif;
@@ -129,8 +129,8 @@ h3{font-size:20px;font-weight:700;letter-spacing:-.005em;line-height:1.2;}
 .console{position:relative;grid-column:2;grid-row:1;align-self:end;justify-self:start;margin-bottom:6%;z-index:44;width:min(330px,56%);padding:14px 16px 16px;border-radius:22px;background:rgba(18,22,54,.62);border:1px solid rgba(246,238,224,.16);box-shadow:0 30px 60px -30px rgba(0,0,0,.6);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);color:#E8E5EE;font-size:14px;line-height:1.4;transition:opacity .35s}
 .console.fade{opacity:0}
 .c-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px}
-.ci{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--c,#F79549);color:#fff;font-style:normal;font-size:12px}
-.c-head small{margin-left:auto;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9da3c4}
+.ci{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--c,#F79549);color:#fff;font-style:normal;font-size:13px}
+.c-head small{margin-left:auto;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#9da3c4}
 .c-q{margin-top:10px;padding:8px 11px;border-radius:12px 12px 12px 4px;background:rgba(246,238,224,.09);color:#F6EEE0}
 .c-steps{list-style:none;margin:10px 0 0;display:grid;gap:6px;font-size:13px;color:#B9BED9}
 .c-steps li{display:flex;align-items:center;gap:8px;animation:stepin .3s ease-out}

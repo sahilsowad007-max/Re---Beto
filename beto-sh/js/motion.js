@@ -63,9 +63,13 @@
   })
   $$('.head h2').forEach((h) => splitWords(h))
 
+  // Reveal once and stay revealed: re-hiding on exit made every section fade
+  // out and back in whenever the reader scrolled up and down.
   const io = new IntersectionObserver((list) => {
     for (const e of list) {
-      e.target.classList.toggle('in', e.isIntersecting)
+      if (!e.isIntersecting) continue
+      e.target.classList.add('in')
+      io.unobserve(e.target)
     }
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 })
   targets.forEach((el) => { el.classList.add('reveal'); el.style.transitionDelay = ''; io.observe(el) })
@@ -103,15 +107,24 @@
   requestAnimationFrame(() => requestAnimationFrame(() => hero.classList.add('go')))
 
   // scroll: progress bar and the hero easing away into the next section
+  // Layout reads are cached and refreshed on resize/load, not on every frame.
   let ticking = false
+  let maxScroll = 0
+  let heroSpan = 1
+  const measure = () => {
+    maxScroll = document.documentElement.scrollHeight - innerHeight
+    heroSpan = Math.max(1, hero.offsetHeight * 0.75)
+  }
   const onScroll = () => {
     ticking = false
-    const max = document.documentElement.scrollHeight - innerHeight
-    bar.style.transform = `scaleX(${max > 0 ? clamp(scrollY / max, 0, 1) : 0})`
+    bar.style.transform = `scaleX(${maxScroll > 0 ? clamp(scrollY / maxScroll, 0, 1) : 0})`
     bar.classList.toggle('on', scrollY > 8)
-    hero.style.setProperty('--hp', clamp(scrollY / (hero.offsetHeight * 0.75), 0, 1).toFixed(3))
+    hero.style.setProperty('--hp', clamp(scrollY / heroSpan, 0, 1).toFixed(3))
   }
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll) } }, { passive: true })
+  addEventListener('resize', () => { measure(); onScroll() })
+  addEventListener('load', () => { measure(); onScroll() })
+  measure()
   onScroll()
 
   // pointer: parallax, spotlight and magnetic actions
@@ -291,7 +304,7 @@
       const nextDelay = t + 2200
       later(() => {
         demo.classList.add('done')
-        setTimeout(play, 700)
+        later(play, 700)
       }, nextDelay)
     }
 
@@ -311,9 +324,22 @@
       }
     }, { threshold: 0.3 }).observe(demo)
 
+    // Pause the loop when the tab is hidden or the demo is off-screen.
+    let onScreen = true
+    new IntersectionObserver(([e]) => {
+      const was = active
+      onScreen = e.isIntersecting
+      active = onScreen && document.visibilityState === 'visible'
+      if (!started) return
+      if (active && !was) play()
+      else if (!active) { timers.forEach(clearTimeout); timers = [] }
+    }).observe(demo)
     addEventListener('visibilitychange', () => {
-      active = document.visibilityState === 'visible'
-      if (active) play()
+      const was = active
+      active = onScreen && document.visibilityState === 'visible'
+      if (!started) return
+      if (active && !was) play()
+      else if (!active) { timers.forEach(clearTimeout); timers = [] }
     })
   }
 })()

@@ -111,10 +111,10 @@
 <body class="ent">
 
 <!-- Splash overlay: platform redesign reveal -->
-<div class="splash-overlay" id="splash-overlay">
+<div class="splash-overlay" id="splash-overlay" role="dialog" aria-modal="true" aria-labelledby="splash-title">
   <div class="splash-card">
     <div class="splash-badge">Platform Redesign</div>
-    <h1 class="splash-title">Beto<span class="splash-mark">.</span></h1>
+    <p class="splash-title" id="splash-title">Beto<span class="splash-mark">.</span></p>
     <p class="splash-sub">Private AI, sovereign infrastructure — redesigned.</p>
     <div class="splash-credit">
       <span class="splash-credit-label">Designed by</span>
@@ -140,8 +140,15 @@
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }
 
+  // The page behind the splash is inert: no tabbing into it, hidden from readers.
+  var behind = [document.getElementById('nav'), document.getElementById('main')]
+  function setInert(on){
+    behind.forEach(function(el){ if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert') } })
+  }
+
   body.classList.add('splash-open')
   root.classList.add('splash-lock')
+  setInert(true)
   toTop()
 
   var closed = false
@@ -151,6 +158,7 @@
     closed = true
     body.classList.remove('splash-open')
     root.classList.remove('splash-lock')
+    setInert(false)
     // an incoming #hash must not drop the revealed page half way down
     if (location.hash) history.replaceState(null, '', location.pathname + location.search)
     toTop()
@@ -161,7 +169,8 @@
   }
 
   var btn = document.getElementById('splash-enter')
-  if (btn) btn.addEventListener('click', reveal)
+  if (btn) { btn.addEventListener('click', reveal); btn.focus({ preventScroll: true }) }
+  addEventListener('keydown', function(e){ if (!closed && e.key === 'Escape') reveal() })
 
   // Pin the page to the top only while the splash is up. Once revealed nothing
   // may touch the scroll position, or it yanks the page up under the reader.
@@ -596,7 +605,7 @@
 </div>
 
 <!-- Dummy chat interface: Ask Beto coming soon -->
-<div class="chat-dummy" id="chat-dummy" hidden>
+<div class="chat-dummy" id="chat-dummy" role="dialog" aria-modal="true" aria-label="Beto chat, coming soon" hidden>
   <div class="chat-dummy-bar">
     <b>Beto</b>
     <button type="button" class="dummy-x" id="dummyClose" aria-label="Close chat"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>

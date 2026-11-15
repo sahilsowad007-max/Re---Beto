@@ -179,6 +179,15 @@ function openChat(intent) {
   document.body.style.overflow = 'hidden'
   setTimeout(() => $('#chatClose').focus(), 50)
 }
+// Keep Tab inside an open dialog.
+function trapTab(e, dialog) {
+  if (e.key !== 'Tab') return
+  const f = [...dialog.querySelectorAll('button,[href],input,textarea,select,[tabindex]:not([tabindex="-1"])')].filter((el) => !el.disabled && el.offsetParent !== null)
+  if (!f.length) return
+  const first = f[0], last = f[f.length - 1]
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+}
 function openDummy(btn) {
   lastFocus = document.activeElement
   dummy.classList.remove('dummy-left', 'dummy-right')
@@ -216,6 +225,7 @@ $('#dummyClose').onclick = closeDummy
 box.addEventListener('click', (e) => e.target === box && closeChat())
 dummy.addEventListener('click', (e) => e.target === dummy && closeDummy())
 addEventListener('keydown', (e) => {
+  if (!dummy.hidden) trapTab(e, dummy)
   if (e.key !== 'Escape') return
   if (!box.hidden) closeChat()
   else if (!dummy.hidden) closeDummy()
