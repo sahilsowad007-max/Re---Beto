@@ -286,13 +286,22 @@ function mount(stage, cfg) {
     startWave()
   }
   // click (or Enter / Space on a focusable stage) waves again
+  const ease = (x) => x * x * (3 - 2 * x)
+  const invEase = (y) => 0.5 - Math.sin(Math.asin(1 - 2 * Math.min(1, Math.max(0, y))) / 3) // inverse of ease()
+  let lastWaving = 0
+  // A click while already waving is not ignored: restart the hold from wherever the arm is now,
+  // so the arm never snaps (interruptible, continuous).
+  function wave() {
+    if (reduce) return
+    if (waveStart < 0) startWave()
+    else waveStart = clock.elapsedTime - WAVE.raise * invEase(lastWaving)
+  }
   if (!cfg.charge) {
-    stage.addEventListener('click', () => { if (waveStart < 0) startWave() })
+    stage.addEventListener('click', wave)
     stage.addEventListener('keydown', (e) => {
-      if ((e.key === 'Enter' || e.key === ' ') && waveStart < 0) { e.preventDefault(); startWave() }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wave() }
     })
   }
-  const ease = (x) => x * x * (3 - 2 * x)
 
   renderer.setAnimationLoop(() => {
     if (!onScreen) return
@@ -308,6 +317,7 @@ function mount(stage, cfg) {
         wave = waving * (2.45 + Math.sin(w * 13) * 0.22)
       } else waveStart = -1
     }
+    lastWaving = waving
     let level = 0
     if (cfg.charge) {
       let flash = 0

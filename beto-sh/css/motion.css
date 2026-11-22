@@ -56,26 +56,29 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   opacity:0;
   translate:0 28px;
   transform:none;
-  transition:opacity .9s var(--ease-soft),translate .9s var(--ease-soft);
+  transition:opacity .5s var(--ease-soft),translate .5s var(--ease-soft);
   transition-delay:var(--d,0ms);
 }
 .mx .reveal.in{opacity:1;translate:0 0}
+/* once a reveal has played, hand the element back to its own hover/press
+   transitions (the reveal transition and its stagger delay must not linger) */
+.mx .reveal.done{
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background-color .2s,color .2s,border-color .2s;
+  transition-delay:0ms;
+}
 
-/* modern reveal variants between sections */
-.mx .reveal-scale{opacity:0;scale:.92;translate:0 22px}
-.mx .reveal-blur{opacity:0;filter:blur(14px);translate:0 26px}
-.mx .reveal-slide-left{opacity:0;translate:-34px 0}
-.mx .reveal-slide-right{opacity:0;translate:34px 0}
-.mx .reveal-flip{opacity:0;rotateX:10deg;translate:0 24px}
-.mx .reveal.in{opacity:1;scale:1;filter:none;translate:0 0;rotateX:0}
-
-.mx .head h2 .w{display:inline-block;opacity:0;translate:0 .5em;transition:opacity .7s var(--ease-soft),translate .7s var(--ease-soft);transition-delay:calc(var(--i,0) * 38ms + 120ms)}
+.mx .head h2 .w{display:inline-block;opacity:0;translate:0 .5em;transition:opacity .45s var(--ease-soft),translate .45s var(--ease-soft);transition-delay:calc(var(--i,0) * 30ms + 100ms)}
 .mx .head.in h2 .w{opacity:1;translate:0 0}
 .mx .head .kicker,.mx .head .lede{transition-delay:calc(var(--d,0ms) + 60ms)}
 
 /* cards lift a little more on hover once revealed */
 .pillar,.run,.ind,.risks li{transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .9s var(--ease-soft),translate .9s var(--ease-soft)}
-.pillar:hover,.run:hover,.ind:hover,.risks li:hover{transform:translateY(-6px)}
+@media (hover:hover){
+  .pillar:hover,.run:hover,.ind:hover,.risks li:hover{transform:translateY(-6px)}
+}
+
+/* press feedback: respond on pointer-down, instantly */
+.btn:active,.splash-btn:active,.hero-replay:active{transform:scale(.97);transition-duration:.1s}
 
 /* ---- hero ----------------------------------------------------------------- */
 .xhero{--px:0;--py:0;--hp:0;--mx:50%;--my:40%}
@@ -105,7 +108,9 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   pointer-events:none;z-index:1;
 }
 .hero-demo{translate:calc(var(--px) * 8px) calc(var(--py) * 5px);opacity:1;transition:box-shadow .35s var(--ease)}
-.hero-demo:hover{box-shadow:0 36px 76px -40px color-mix(in srgb,var(--ink) 55%,transparent)}
+@media (hover:hover){
+  .hero-demo:hover{box-shadow:0 36px 76px -40px color-mix(in srgb,var(--ink) 55%,transparent)}
+}
 
 /* a bigger Beto on desktop */
 @media (min-width:941px){
@@ -113,21 +118,24 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 }
 
 /* headline words: rise in on load, lift on hover */
-.xhero h1 .w{display:inline-block;opacity:0;translate:0 .6em;transition:opacity .9s var(--ease-soft),translate .9s var(--ease-soft),color .25s;transition-delay:calc(var(--i,0) * 70ms + 150ms)}
+.xhero h1 .w{display:inline-block;opacity:0;translate:0 .6em;transition:opacity .6s var(--ease-soft),translate .6s var(--ease-soft),color .25s;transition-delay:calc(var(--i,0) * 50ms + 120ms)}
 .xhero.go h1 .w{opacity:1;translate:0 0}
 .xhero.go h1 .w:hover{translate:0 -.08em;color:var(--terra);transition-delay:0ms}
 .xhero .glowtext .w:hover{color:var(--terra)}
 .xhero .ctas,.xhero .hero-aside{opacity:1}
 .mx .xhero:not(.go) .ctas,.mx .xhero:not(.go) .hero-aside{opacity:0;translate:0 18px}
-.mx .xhero .ctas,.mx .xhero .hero-aside{transition:opacity .9s var(--ease-soft) .75s,translate .9s var(--ease-soft) .75s}
+.mx .xhero .ctas,.mx .xhero .hero-aside{transition:opacity .6s var(--ease-soft) .5s,translate .6s var(--ease-soft) .5s}
 
 /* magnetic actions */
 [data-magnet]{translate:var(--tx,0) var(--ty,0);transition:translate .3s var(--ease),transform .2s,box-shadow .2s,background .15s}
 
 /* live demo conversation */
 .hero-demo-bar{position:relative}
-.hero-replay{margin-left:auto;min-height:24px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:var(--white);color:var(--slate);font:inherit;font-size:12px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
-.hero-replay:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.hero-replay{margin-left:auto;min-height:1.75rem;padding:0 .75rem;border:1px solid var(--line);border-radius:999px;background:var(--white);color:var(--slate);font:inherit;font-size:.75rem;cursor:pointer;transition:background .2s,color .2s,border-color .2s,transform .2s var(--ease)}
+.hero-replay + .hero-replay{margin-left:.5rem}
+@media (hover:hover){
+  .hero-replay:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+}
 .hero-replay:focus-visible{outline:2px solid var(--ink-2);outline-offset:2px}
 .mx .hero-message{position:relative;opacity:0;translate:0 12px;transition:opacity .5s var(--ease-soft),translate .5s var(--ease-soft)}
 .mx .hero-message.on{opacity:1;translate:0 0}
@@ -153,6 +161,7 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   .xhero-in,.xhero-stage,.hero-demo,.xhero-bg{opacity:1;translate:none}
   .xhero::before,.mx-progress{display:none}
   .xhero-stage.hop .still,.hero-message.pending::after{animation:none}
+  .mx .reveal.done{transition:none}
 }
 
 /* a taller nav bar */
@@ -190,14 +199,16 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
     0 30px 60px -30px color-mix(in srgb,var(--ink) 45%,transparent);
   transition:transform .5s var(--ease);
 }
-.orb:hover{transform:scale(1.04)}
+@media (hover:hover){
+  .orb:hover{transform:scale(1.04)}
+}
 .orb small{color:var(--slate)}
 @media (max-width:620px){.core{--orb:200px}}
 @media (prefers-reduced-motion:reduce){.core::before,.core::after{animation:none;opacity:.3}.orb{transition:none}}
 
 /* glassy nav */
 .nav .nav-in,.nav:not(.scrolled) .nav-in,.nav.scrolled .nav-in{
-  background:linear-gradient(135deg,color-mix(in srgb,var(--white) 62%,transparent),color-mix(in srgb,var(--white) 30%,transparent));
+  background:linear-gradient(135deg,color-mix(in srgb,var(--white) 78%,transparent),color-mix(in srgb,var(--white) 58%,transparent));
   border:1px solid color-mix(in srgb,var(--white) 70%,transparent);
   backdrop-filter:blur(22px) saturate(1.8);-webkit-backdrop-filter:blur(22px) saturate(1.8);
   box-shadow:
@@ -206,14 +217,14 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
     0 18px 40px -26px color-mix(in srgb,var(--ink) 40%,transparent);
   transition:background .4s var(--ease),box-shadow .4s var(--ease);
 }
-.nav.scrolled .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--white) 72%,transparent),color-mix(in srgb,var(--white) 42%,transparent))}
+.nav.scrolled .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--white) 86%,transparent),color-mix(in srgb,var(--white) 68%,transparent))}
 .links a[aria-current="true"]{background:color-mix(in srgb,var(--white) 70%,transparent)}
 .nav .menu-btn{background:color-mix(in srgb,var(--white) 55%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 
 /* ---- splash overlay: platform redesign reveal ---- */
 .splash-overlay{
   position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
-  background:rgba(23,27,59,0.25);
+  background:rgba(15,23,59,0.4);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   transition:opacity .7s cubic-bezier(.2,.8,.2,1),visibility .7s cubic-bezier(.2,.8,.2,1);
 }
@@ -232,11 +243,16 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   border-radius:30px;
   box-shadow:0 30px 70px -20px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,0.2);
   backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);
-  overflow:hidden;transform:scale(.9);opacity:0;
-  animation:splash-in 1s cubic-bezier(.2,.8,.2,1) .2s forwards;
+  overflow:hidden;
+  /* resting state lives on the base rule; the entrance only fills backwards,
+     so hover and the exit transition are not overridden by a held animation */
+  animation:splash-in 1s cubic-bezier(.2,.8,.2,1) .2s backwards;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s;
 }
+/* leave along the path we arrived on */
+.splash-overlay.exiting .splash-card{transform:scale(.84) translateY(14px);opacity:0}
 .splash-badge{
-  font-size:11px;font-weight:900;letter-spacing:.24em;text-transform:uppercase;
+  font-size:.6875rem;font-weight:900;letter-spacing:.24em;text-transform:uppercase;
   color:#F4C76A;display:inline-block;padding:6px 14px;border-radius:999px;
   background:rgba(244,199,106,.16);border:1px solid rgba(244,199,106,.35);
   box-shadow:0 0 12px rgba(244,199,106,.25);
@@ -245,38 +261,63 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 .splash-title .splash-mark{color:#F79549}
 .splash-sub{font-size:clamp(14px,1.6vw,18px);color:#F3F5FC;line-height:1.6;margin:0;max-width:60ch;text-shadow:0 1px 8px rgba(0,0,0,.3)}
 .splash-credit{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:center}
-.splash-credit-label{font-size:12px;font-weight:900;color:#F4C76A;text-transform:uppercase;letter-spacing:.16em}
-.splash-credit-link{font-size:16px;font-weight:800;color:#fff;transition:color .2s;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.splash-credit-label{font-size:.75rem;font-weight:900;color:#F4C76A;text-transform:uppercase;letter-spacing:.16em}
+.splash-credit-link{font-size:1rem;font-weight:800;color:#fff;transition:color .2s;text-shadow:0 1px 8px rgba(0,0,0,.3)}
 .splash-credit-link:hover{color:#F79549}
-.splash-credit-role{font-size:12px;font-weight:700;color:#F3F5FC}
+.splash-credit-role{font-size:.75rem;font-weight:700;color:#F3F5FC}
 .splash-portfolio-text{
   margin-top:12px;display:inline-block;padding:11px 20px;border-radius:12px;
   background:rgba(255,255,255,0.1);border:1px solid rgba(244,199,106,.45);
-  color:#fff;font-size:13px;font-weight:800;letter-spacing:.04em;
+  color:#fff;font-size:.8125rem;font-weight:800;letter-spacing:.04em;
   text-decoration:none;transition:transform .2s,background .2s,border-color .2s,color .2s,box-shadow .2s;
   cursor:pointer;box-shadow:0 0 0 rgba(244,199,106,0)
 }
-.splash-portfolio-text:hover{
-  background:rgba(244,199,106,.2);border-color:#F4C76A;color:#fff;
-  transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(244,199,106,.35)
+@media (hover:hover){
+  .splash-portfolio-text:hover{
+    background:rgba(244,199,106,.2);border-color:#F4C76A;color:#fff;
+    transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(244,199,106,.35)
+  }
 }
+.splash-portfolio-text:active{transform:scale(.97)}
 .splash-btn{
   margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
   min-height:48px;padding:0 28px;border-radius:999px;background:#fff;color:#171B3B;
   font-weight:900;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,filter .2s;
   box-shadow:0 16px 32px -16px rgba(247,149,73,.4);
 }
-.splash-btn:hover{filter:brightness(1.05);transform:translateY(-2px);box-shadow:0 22px 44px -20px rgba(247,149,73,.5)}
-.splash-btn:active{transform:none}
+@media (hover:hover){
+  .splash-btn:hover{filter:brightness(1.05);transform:translateY(-2px);box-shadow:0 22px 44px -20px rgba(247,149,73,.5)}
+}
 @keyframes splash-in{
   from{opacity:0;transform:scale(.84) translateY(14px)}
   to{opacity:1;transform:scale(1) translateY(0)}
 }
 
-/* page behind splash: blur + fade */
-.splash-open main{filter:blur(8px) saturate(.9);transition:filter .6s ease,opacity .6s ease}
-.splash-open main::before{
-  content:"";position:fixed;inset:0;z-index:-1;background:rgba(15,23,59,.25);
-  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)
+/* The page behind the splash is blurred and dimmed by .splash-overlay's own
+   backdrop-filter; filtering all of <main> was costly and is no longer needed. */
+
+/* ---- accessibility preferences ------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  .splash-card{animation:none;transition:opacity .2s linear}
+  .splash-overlay.exiting .splash-card{transform:none}
+  .splash-overlay{transition-duration:.2s}
+  .splash-glass-panel,.splash-orbs::before,.splash-orbs::after{animation:none}
+  .splash-btn,.splash-portfolio-text,.btn,.hero-replay{transition:none}
+  .btn:active,.splash-btn:active,.hero-replay:active,.splash-portfolio-text:active{transform:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  .nav .nav-in,.nav:not(.scrolled) .nav-in,.nav.scrolled .nav-in{background:var(--white);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .nav .menu-btn{background:var(--white);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .orb{background:var(--white);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .splash-overlay{background:#0F173B;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .splash-card{background:#171B3B;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .splash-glass-panel{display:none}
+  .splash-orbs{display:none}
+}
+@media (prefers-contrast:more){
+  .nav .nav-in,.nav:not(.scrolled) .nav-in,.nav.scrolled .nav-in{background:var(--white);border:2px solid var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .orb{background:var(--white);border:2px solid var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .splash-card{background:#171B3B;border:2px solid #fff;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero-replay{border-color:var(--ink);color:var(--ink)}
 }
 @media (prefers-reduced-motion:reduce){.splash-card{animation:none;opacity:1;transform:none}.splash-overlay{transition:none}.splash-open main{filter:none}}

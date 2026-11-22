@@ -5,7 +5,8 @@
 (() => {
   const $ = (s, el = document) => el.querySelector(s)
   const $$ = (s, el = document) => [...el.querySelectorAll(s)]
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const rm = matchMedia('(prefers-reduced-motion: reduce)')
+  if (rm.matches) return
   const root = document.documentElement
   root.classList.add('mx')
 
@@ -43,44 +44,40 @@
     for (const child of [...wrap.children]) {
       if (child.classList.contains('head')) { targets.add(child); continue }
       const kids = [...child.children]
-      if (kids.length >= 3 && !child.matches('form,details')) kids.forEach((k, n) => { k.style.setProperty('--d', `${Math.min(n, 6) * 80}ms`); targets.add(k) })
-      else { child.style.setProperty('--d', '80ms'); targets.add(child) }
+      if (kids.length >= 3 && !child.matches('form,details')) kids.forEach((k, n) => { k.style.setProperty('--d', `${Math.min(n, 5) * 50}ms`); targets.add(k) })
+      else { child.style.setProperty('--d', '50ms'); targets.add(child) }
     }
   }
   // The footer's blocks rise in as the last sheet lands.
   const foot = $('.bfoot')
   if (foot) {
     const blocks = $$('.bfoot > *:not(script)').flatMap((b) => (b.children.length >= 3 ? [...b.children] : [b]))
-    blocks.slice(0, 12).forEach((b, n) => { b.style.setProperty('--d', `${Math.min(n, 5) * 70}ms`); targets.add(b) })
+    blocks.slice(0, 12).forEach((b, n) => { b.style.setProperty('--d', `${Math.min(n, 5) * 50}ms`); targets.add(b) })
   }
   // Items already tagged in the markup keep their sibling stagger.
   $$('.reveal').forEach((el) => {
     if (!el.style.getPropertyValue('--d')) {
       const n = [...el.parentElement.children].indexOf(el)
-      el.style.setProperty('--d', `${Math.min(n, 6) * 80}ms`)
+      el.style.setProperty('--d', `${Math.min(n, 5) * 50}ms`)
     }
     targets.add(el)
   })
   $$('.head h2').forEach((h) => splitWords(h))
 
-  // Reveal once and stay revealed: re-hiding on exit made every section fade
-  // out and back in whenever the reader scrolled up and down.
+  // Reveal once and stay revealed, with one consistent motion (a short rise):
+  // re-hiding on exit made every section fade out and back in whenever the
+  // reader scrolled up and down. After the entrance plays, the element is
+  // handed back to its own hover/press transitions (.done).
   const io = new IntersectionObserver((list) => {
     for (const e of list) {
       if (!e.isIntersecting) continue
-      e.target.classList.add('in')
-      io.unobserve(e.target)
+      const el = e.target
+      el.classList.add('in')
+      io.unobserve(el)
+      setTimeout(() => el.classList.add('done'), 1400)
     }
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 })
   targets.forEach((el) => { el.classList.add('reveal'); el.style.transitionDelay = ''; io.observe(el) })
-
-  // modern reveal variants: scale / blur / slide / flip between sections
-  const variants = ['reveal-scale','reveal-blur','reveal-slide-left','reveal-slide-right','reveal-flip']
-  $$('.section').forEach((sec, si) => {
-    $$('.reveal', sec).forEach((el, i) => {
-      el.classList.add(variants[(si + i) % variants.length])
-    })
-  })
 
   // ---- progress bar and current section in the nav ---------------------------
   const bar = document.createElement('div')
@@ -131,15 +128,21 @@
   if (fine) {
     const magnets = $$('.xhero .btn.gold, .hero-aside > a', hero)
     magnets.forEach((m) => m.setAttribute('data-magnet', ''))
-    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0
-    const loop = () => {
-      cx += (tx - cx) * 0.08
-      cy += (ty - cy) * 0.08
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, last = 0
+    // frame-rate independent smoothing: same feel at 60 and 120 Hz
+    const loop = (now) => {
+      const dt = last ? Math.min((now - last) / 1000, 0.05) : 1 / 60
+      last = now
+      const k = 1 - Math.exp(-dt * 5)
+      cx += (tx - cx) * k
+      cy += (ty - cy) * k
       hero.style.setProperty('--px', cx.toFixed(3))
       hero.style.setProperty('--py', cy.toFixed(3))
-      raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.002 ? requestAnimationFrame(loop) : 0
+      if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.002) raf = requestAnimationFrame(loop)
+      else { raf = 0; last = 0 }
     }
     hero.addEventListener('pointermove', (e) => {
+      if (rm.matches) return
       const r = hero.getBoundingClientRect()
       tx = ((e.clientX - r.left) / r.width - 0.5) * 2
       ty = ((e.clientY - r.top) / r.height - 0.5) * 2
@@ -230,7 +233,15 @@
     replay.className = 'hero-replay'
     replay.textContent = 'Replay'
     replay.setAttribute('aria-label', 'Replay the example conversation')
-    bar2?.append(replay)
+    // Pause / resume: the conversation loops, so people need a way to stop it (WCAG 2.2.2).
+    const pauseBtn = document.createElement('button')
+    pauseBtn.type = 'button'
+    pauseBtn.className = 'hero-replay hero-pause'
+    pauseBtn.textContent = 'Pause'
+    pauseBtn.setAttribute('aria-label', 'Pause the example conversation')
+    pauseBtn.setAttribute('aria-pressed', 'false')
+    bar2?.append(pauseBtn)
+    let paused = false
 
     let timers = []
     const later = (fn, ms) => timers.push(setTimeout(fn, ms))
@@ -277,8 +288,24 @@
       }
     }
 
+    function setPaused(on) {
+      paused = on
+      pauseBtn.textContent = on ? 'Resume' : 'Pause'
+      pauseBtn.setAttribute('aria-pressed', String(on))
+      pauseBtn.setAttribute('aria-label', on ? 'Resume the example conversation' : 'Pause the example conversation')
+      if (on) {
+        // stop the loop and show the whole conversation, fully readable
+        timers.forEach(clearTimeout)
+        timers = []
+        $$('.hero-message', demo).forEach((m) => m.classList.remove('pending'))
+        $$('.hero-message', demo).forEach((m) => m.classList.add('on'))
+      } else {
+        play()
+      }
+    }
+
     function play() {
-      if (!active) return
+      if (!active || paused) return
       timers.forEach(clearTimeout)
       timers = []
       demo.classList.remove('done')
@@ -304,15 +331,20 @@
       const nextDelay = t + 2200
       later(() => {
         demo.classList.add('done')
-        later(play, 700)
+        later(play, 700) // tracked, so Replay / Pause can cancel it
       }, nextDelay)
     }
 
     replay.addEventListener('click', () => {
       industryIndex = 0
       active = true
+      paused = false
+      pauseBtn.textContent = 'Pause'
+      pauseBtn.setAttribute('aria-pressed', 'false')
+      pauseBtn.setAttribute('aria-label', 'Pause the example conversation')
       play()
     })
+    pauseBtn.addEventListener('click', () => setPaused(!paused))
 
     let started = false
     new IntersectionObserver(([e], obs) => {
@@ -338,7 +370,7 @@
       const was = active
       active = onScreen && document.visibilityState === 'visible'
       if (!started) return
-      if (active && !was) play()
+      if (active && !was) play() // play() itself does nothing while paused
       else if (!active) { timers.forEach(clearTimeout); timers = [] }
     })
   }
