@@ -30,7 +30,8 @@ function mount(stage, cfg) {
   } catch (e) {
     return
   }
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2))
+  // three canvases redraw every frame: a lower pixel-ratio cap on phones keeps scrolling smooth
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth <= 720 ? 1.5 : 2))
   renderer.setClearColor(0x000000, 0)
   const canvas = renderer.domElement
   canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block'

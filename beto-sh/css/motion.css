@@ -93,6 +93,20 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 
 .xhero-bg{translate:calc(var(--px) * 10px) calc(var(--py) * 6px)}
 .xhero-in{opacity:calc(1 - var(--hp) * .95);translate:0 calc(var(--hp) * -48px)}
+
+/* Scroll-linked effects on the compositor. Where scroll timelines exist, the hero eases
+   away and the progress bar fills with no per-frame JavaScript (motion.js skips its own
+   version there). Same range as the JS fallback: 0 to 75% of the hero's height. */
+@supports (animation-timeline: scroll()) {
+  @keyframes mx-hero-copy-away{to{opacity:.05;translate:0 -48px}}
+  @keyframes mx-hero-stage-away{to{opacity:.3;translate:0 70px}}
+  @keyframes mx-bar-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .mx-progress{animation:mx-bar-fill linear both;animation-timeline:scroll(root)}
+  @media (min-width:941px){
+    .mx .xhero-in{animation:mx-hero-copy-away linear both;animation-timeline:scroll(root);animation-range:0px calc(max(100svh,900px) * .75)}
+    .mx .xhero-stage{animation:mx-hero-stage-away linear both;animation-timeline:scroll(root);animation-range:0px calc(max(100svh,900px) * .75)}
+  }
+}
 .xhero-stage{opacity:calc(1 - var(--hp) * .7);translate:0 calc(var(--hp) * 70px);cursor:pointer}
 .xhero-stage .still{translate:calc(var(--px) * -18px) calc(var(--py) * -10px);transition:translate .5s var(--ease-soft)}
 .xhero-stage.hop .still{animation:mx-hop .9s var(--ease) 1}
@@ -365,6 +379,7 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   .mx .reveal.done{transition:none}
   .xhero-stage .still,[data-magnet]{translate:none;transition:none}
   .xhero-in,.xhero-stage,.hero-demo,.xhero-bg{opacity:1;translate:none}
+  .mx .xhero-in,.mx .xhero-stage,.mx-progress{animation:none} /* scroll-linked effects off if the setting flips live */
   .xhero::before,.mx-progress{display:none}
   .xhero-stage.hop .still,.hero-message.pending::after{animation:none}
   /* knowledge-hub orb */

@@ -112,10 +112,15 @@
     maxScroll = document.documentElement.scrollHeight - innerHeight
     heroSpan = Math.max(1, hero.offsetHeight * 0.75)
   }
+  // Where the browser supports scroll timelines, motion.css drives the progress bar and the
+  // hero fade on the compositor (no JS per frame, never janks with a busy main thread).
+  // Everywhere else this handler does it, as before.
+  const scrollLinkedInCSS = CSS.supports('animation-timeline', 'scroll()')
   const onScroll = () => {
     ticking = false
-    bar.style.transform = `scaleX(${maxScroll > 0 ? clamp(scrollY / maxScroll, 0, 1) : 0})`
     bar.classList.toggle('on', scrollY > 8)
+    if (scrollLinkedInCSS) return
+    bar.style.transform = `scaleX(${maxScroll > 0 ? clamp(scrollY / maxScroll, 0, 1) : 0})`
     hero.style.setProperty('--hp', clamp(scrollY / heroSpan, 0, 1).toFixed(3))
   }
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll) } }, { passive: true })
@@ -123,6 +128,52 @@
   addEventListener('load', () => { measure(); onScroll() })
   measure()
   onScroll()
+
+  // ---- anchor links glide on a spring ----------------------------------------
+  // Native smooth scroll has a fixed duration and no momentum, so an 8,000px jump
+  // crawls. This uses a critically damped spring that starts from rest, speeds up
+  // for longer trips, and gives up the instant the reader touches the page (wheel,
+  // touch, key, pointer), leaving native scrolling in charge. Ordinary wheel and
+  // touch scrolling is never intercepted.
+  let glideRaf = 0
+  const stopGlide = () => { if (glideRaf) { cancelAnimationFrame(glideRaf); glideRaf = 0 } }
+  for (const type of ['wheel', 'touchstart', 'pointerdown', 'keydown']) addEventListener(type, stopGlide, { passive: true })
+  function glide(target) {
+    stopGlide()
+    target = clamp(target, 0, document.documentElement.scrollHeight - innerHeight)
+    const from = scrollY
+    if (rm.matches) { scrollTo({ top: target, behavior: 'instant' }); return }
+    if (Math.abs(target - from) < 2) return
+    const response = clamp(0.32 + Math.abs(target - from) / 12000, 0.32, 0.6)
+    const w = (2 * Math.PI) / response
+    let x = from, v = 0, last = performance.now()
+    const step = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.05)
+      last = now
+      const n = Math.max(1, Math.ceil(dt * 240)), h = dt / n
+      for (let i = 0; i < n; i++) { v += (-(w * w) * (x - target) - 2 * w * v) * h; x += v * h }
+      if (Math.abs(x - target) < 0.5 && Math.abs(v) < 8) { scrollTo({ top: target, behavior: 'instant' }); glideRaf = 0; return }
+      scrollTo({ top: x, behavior: 'instant' })
+      glideRaf = requestAnimationFrame(step)
+    }
+    glideRaf = requestAnimationFrame(step)
+  }
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+    const a = e.target.closest('a[href^="#"]')
+    if (!a) return
+    const id = decodeURIComponent(a.getAttribute('href').slice(1))
+    const el = id ? document.getElementById(id) : null
+    if (id && !el) return
+    e.preventDefault()
+    const pad = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0
+    glide(el ? el.getBoundingClientRect().top + scrollY - pad : 0)
+    if (el) {
+      history.pushState(null, '', `#${id}`)
+      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1')
+      el.focus({ preventScroll: true })
+    }
+  })
 
   // pointer: parallax, spotlight and magnetic actions
   if (fine) {
