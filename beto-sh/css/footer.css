@@ -10,7 +10,7 @@
 
 /* closing call to action */
 .bf-cta{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;padding:clamp(56px,7vw,88px) 0 clamp(40px,5vw,56px)}
-.bf-cta h2{margin:0;font-size:clamp(32px,4.4vw,56px);line-height:1.04;letter-spacing:-.035em;color:#fff}
+.bf-cta h2{margin:0;font-size:clamp(32px,4.4vw,56px);line-height:1.04;letter-spacing:var(--track-display,-.025em);color:#fff}
 .bf-hl{background:linear-gradient(100deg,#F4C76A,#F79549 55%,#EE8B6E);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
 .bf-cta p{max-width:30em;margin-top:14px;color:rgba(246,238,224,.65);font-size:16px}
 .bf-btns{display:flex;flex-wrap:wrap;gap:12px;flex-shrink:0}
@@ -25,7 +25,7 @@
 /* links and the Ask Beto panel */
 .bf-main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,72px);padding:clamp(40px,5vw,56px) 0}
 .bf-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
-.bf-k{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,238,224,.42)}
+.bf-k{font-size:.8125rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,238,224,.66)}
 .bf-cols ul{list-style:none;margin-top:12px}
 .bf-cols a{display:inline-flex;align-items:center;gap:6px;min-height:36px;font-size:15px;color:rgba(246,238,224,.78);transition:color .15s}
 .bf-cols a:hover{color:#fff}
@@ -47,7 +47,10 @@
 
 /* legal */
 .bf-legal{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;padding:22px 26px;margin-bottom:8px;border-radius:20px;background:rgba(255,255,255,.04);font-size:13.5px;color:rgba(246,238,224,.5)}
+.bf-legal{flex-wrap:wrap;color:rgba(246,238,224,.66)}
 .bf-legal p{max-width:44em}
+/* the tea-break line is copy, not legal text: its own row under the legal links */
+.bf-legal .bf-joke{order:3;flex:1 1 100%;max-width:none;margin:0;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);font-style:italic}
 .bf-legal nav{display:flex;flex-wrap:wrap;gap:4px 18px}
 .bf-legal nav a{display:inline-flex;align-items:center;min-height:36px}
 .bf-legal nav a:hover{color:#fff}

@@ -345,6 +345,8 @@
       play()
     })
     pauseBtn.addEventListener('click', () => setPaused(!paused))
+    // turning "reduce motion" on mid-session stops the loop and shows the full conversation
+    rm.addEventListener('change', (e) => { if (e.matches && !paused) setPaused(true) })
 
     let started = false
     new IntersectionObserver(([e], obs) => {

@@ -4,7 +4,10 @@
 // static image in the stage stays visible (the .rendered class is added only on success).
 import * as THREE from 'three'
 
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+// Live: switching "reduce motion" on or off mid-session takes effect without a reload.
+const rmq = matchMedia('(prefers-reduced-motion: reduce)')
+let reduce = rmq.matches
+rmq.addEventListener('change', (e) => { reduce = e.matches })
 
 // fill: share of the stage height the robot covers. lift: gap under its feet, as a share of the height.
 // waveOn: 'reveal' waves once the splash closes; 'view' waves the first time the stage scrolls into view.
@@ -238,8 +241,9 @@ function mount(stage, cfg) {
 
   // Head follows the pointer
   const look = { x: 0, y: 0, tx: 0, ty: 0 }
-  if (!reduce) {
+  {
     addEventListener('pointermove', (e) => {
+      if (reduce) { look.tx = 0; look.ty = 0; return }
       const r = stage.getBoundingClientRect()
       const cx = r.left + r.width / 2, cy = r.top + r.height * 0.4
       look.tx = Math.max(-1, Math.min(1, (e.clientX - cx) / (innerWidth * 0.5)))

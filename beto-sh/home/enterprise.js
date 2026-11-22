@@ -1,26 +1,10 @@
 // beto.sh home, private AI for your enterprise (docs/landing-plan.md v2): the
-// immersive hero (the real Beto on the private AI stack, a language-model
-// cortex behind him, js/cortex.js), the stack explorer, reveals, the phone
-// menu and bar, and the chat over the page.
+// stack explorer, the phone menu and bar, and the chat over the page.
+// The 3D Beto stages live in js/beto-robot.js; scroll reveals in js/motion.js.
 const $ = (s, el = document) => el.querySelector(s)
 const $$ = (s, el = document) => [...el.querySelectorAll(s)]
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
 const phone = matchMedia('(max-width: 620px)')
-const small = matchMedia('(max-width: 940px)').matches || (navigator.hardwareConcurrency || 8) <= 4
-
-let cortex = null
-const stageRuntime = Promise.all([
-  import('/js/stage.js'),
-  import('/js/cortex.js'),
-]).then(([stage, cortexModule]) => ({
-  Stage: stage.Stage,
-  preload: stage.preload,
-  buildCortex: cortexModule.buildCortex,
-})).catch((error) => {
-  document.documentElement.classList.add('no-webgl')
-  console.warn('Beto’s 3D stage is unavailable; showing the static mascot assets.', error)
-  return null
-})
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
 
 // ---- nav, menu, the phone bar --------------------------------------------
 const nav = $('#nav')
@@ -41,9 +25,6 @@ const menu = (open) => {
 }
 menuBtn.onclick = () => menu(!links.classList.contains('open'))
 links.addEventListener('click', (e) => e.target.closest('a') && menu(false))
-
-// Scroll reveals live in js/motion.js. A second observer here fought it over
-// the same elements (adding `in` while motion.js removed it), which flickered.
 
 // ---- the stack explorer ------------------------------------------------------
 const STACK = [
@@ -68,94 +49,61 @@ const STACK = [
 ]
 const layersEl = $('#layers')
 const detail = $('#ldetail')
+layersEl.setAttribute('aria-orientation', 'vertical')
+// rows are listed top-down (layer 6 first), so rows[k] is STACK[STACK.length - 1 - k]
 const rows = STACK.map((L, i) => {
   const b = document.createElement('button')
   b.type = 'button'
   b.className = 'lrow'
+  b.id = `ltab-${i}`
   b.setAttribute('role', 'tab')
+  b.setAttribute('aria-controls', 'ldetail')
   b.style.setProperty('--k', L.k)
   b.innerHTML = `<span class="n${L.dk ? ' dk' : ''}">0${i + 1}</span><span><b>Layer ${i + 1} · ${L.n}</b><small>${L.line}</small></span>`
   b.onclick = () => pick(i, true)
   return b
 }).reverse()
 layersEl.replaceChildren(...rows)
+
 function pick(i, user) {
-  STACK.forEach((_, j) => rows[STACK.length - 1 - j].setAttribute('aria-selected', String(j === i)))
+  rows.forEach((row, k) => {
+    const on = STACK.length - 1 - k === i
+    row.setAttribute('aria-selected', String(on))
+    row.tabIndex = on ? 0 : -1 // roving tabindex: one stop in the tab order
+  })
   const L = STACK[i]
   detail.style.setProperty('--k', L.k)
+  detail.setAttribute('aria-labelledby', `ltab-${i}`)
   detail.innerHTML = `<h3>Layer ${i + 1} · ${L.n}</h3>
     <p class="lk you">You choose</p><ul>${L.you.map((t) => `<li>${t}</li>`).join('')}</ul>
     <p class="lk we">Betopia builds and runs</p><ul>${L.we.map((t) => `<li>${t}</li>`).join('')}</ul>`
-  if (user) { cortex?.pulse(i); window.betoTrack?.('layer_view', { layer: L.n }) }
+  if (user) {
+    // the new content rises in from where the change happened (CSS: .ldetail.swap)
+    detail.classList.remove('swap')
+    void detail.offsetWidth
+    detail.classList.add('swap')
+    window.betoTrack?.('layer_view', { layer: L.n })
+  }
 }
+// Arrow keys, Home and End move between layers, as in any tab list.
+layersEl.addEventListener('keydown', (e) => {
+  const at = rows.indexOf(document.activeElement)
+  if (at < 0) return
+  let to = at
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') to = (at + 1) % rows.length
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') to = (at - 1 + rows.length) % rows.length
+  else if (e.key === 'Home') to = 0
+  else if (e.key === 'End') to = rows.length - 1
+  else return
+  e.preventDefault()
+  rows[to].focus()
+  pick(STACK.length - 1 - to, true)
+})
 pick(1)
-// The hero legend opens the explorer at that layer.
+// Anything with data-layer opens the explorer at that layer.
 document.addEventListener('click', (e) => {
   const a = e.target.closest('[data-layer]')
   if (a) pick(Number(a.dataset.layer))
-})
-
-// ---- the hero and supporting Beto stages ----------------------------------
-stageRuntime.then((runtime) => {
-  if (!runtime) return
-
-  const { Stage, preload, buildCortex } = runtime
-  preload()
-  const heroEl = $('#st-hero')
-  const hero = new Stage(heroEl, {
-    mood: 'wave',
-    view: small ? { y: 1.5, dist: 11, fov: 30, lookY: 1.05 } : { y: 1.7, dist: 11.2, fov: 30, lookY: 1.15 },
-    follow: 0.7, yaw: small ? 0 : -0.12, shadow: false,
-    onReady: (s) => setTimeout(() => s.mood === 'wave' && s.set('stand'), 2400),
-    tick: (s, dt, t) => {
-      const w = heroEl.clientWidth, h = heroEl.clientHeight
-      if (!small && w > 0) s.camera.setViewOffset(w, h, -w * 0.25, 0, w, h)
-      else if (s.camera.view) s.camera.clearViewOffset()
-      cortex?.update(dt, t)
-    },
-  })
-  if (hero.scene) {
-    heroEl.classList.add('rendered')
-    cortex = buildCortex(hero, { small, reduce })
-    const items = $$('#legend li')
-    cortex.onLayer((i) => {
-      for (const li of items) li.classList.toggle('on', Number(li.dataset.l) === i)
-      if (i === 5 && hero.beto && !reduce) {
-        let k = 0
-        const id = setInterval(() => { hero.beto.face.level = k++ % 2 ? 0.2 : 0.8; if (k > 6) { clearInterval(id); hero.beto.face.level = 0 } }, 90)
-      }
-    })
-    $$('#legend a').forEach((a) => a.addEventListener('pointerenter', () => cortex.pulse(Number(a.dataset.layer))))
-  } else {
-    heroEl.classList.add('fallback')
-    document.documentElement.classList.add('no-webgl')
-  }
-  heroEl.addEventListener('click', () => { hero.hop(0.8); if (hero.beto) { hero.set('happy'); setTimeout(() => hero.mood === 'happy' && hero.set('stand'), 1400) } })
-
-  const FULL = { y: 1.15, dist: 7.6, fov: 26, lookY: 1.05 }
-  function lazy(id, opts, onSeen) {
-    const el = document.getElementById(id)
-    if (!el) return
-    let s = null
-    const near = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return
-      near.disconnect()
-      s = new Stage(el, opts)
-      if (s.scene) el.classList.add('rendered')
-      else el.classList.add('fallback')
-      el.addEventListener('click', () => s.hop(1))
-    }, { rootMargin: '600px 0px' })
-    near.observe(el)
-    new IntersectionObserver(([e]) => { if (e.isIntersecting && s) onSeen?.(s) }, { threshold: 0.5 }).observe(el)
-  }
-  lazy('st-proof', { mood: 'stand', view: FULL, follow: 0.8, yaw: 0.3 }, (s) => { s.set('wave'); setTimeout(() => s.mood === 'wave' && s.set('stand'), 2000) })
-  lazy('st-cta', { mood: 'stand', view: { ...FULL, dist: 6.8 }, follow: 0.8 }, (s) => {
-    s.set('wave')
-    setTimeout(() => { s.set('happy'); setTimeout(() => s.set('stand'), 1600) }, 1800)
-  })
-}).catch((error) => {
-  document.documentElement.classList.add('no-webgl')
-  console.error('Beto’s 3D stage could not be initialized; showing the static mascot assets.', error)
 })
 
 // The security brief button notes the request in the form.
@@ -167,68 +115,198 @@ document.addEventListener('click', (e) => {
 
 // ---- Ask Beto: the chat over the page ---------------------------------------
 const box = $('#chatbox')
+const boxIn = $('.chatbox-in', box)
 const dummy = $('#chat-dummy')
 const frame = $('#chatFrame')
 let lastFocus = null
-function openChat(intent) {
+
+// Present / dismiss use CSS transitions on an .open class, not keyframes, so a
+// panel can be grabbed mid-flight: closing while it opens (or reopening while it
+// closes) continues from its current position instead of jumping.
+const isOpen = (el) => !el.hidden && el.classList.contains('open')
+function present(el, trigger, panel = el) {
+  clearTimeout(el._t)
+  el._cleanup?.() // drop any drag / spring state left by a swipe-dismiss
+  const fresh = el.hidden
+  el.hidden = false
+  if (trigger && fresh) {
+    // grow out of the control that was pressed, not out of the panel's centre
+    const b = trigger.getBoundingClientRect()
+    const r = panel.getBoundingClientRect()
+    panel.style.transformOrigin = `${b.left + b.width / 2 - r.left}px ${b.top + b.height / 2 - r.top}px`
+  }
+  void el.offsetWidth // commit the closed state so the transition runs
+  el.classList.add('open')
+}
+function dismiss(el) {
+  el.classList.remove('open')
+  clearTimeout(el._t)
+  // leave along the path it arrived on, then take it out of the page
+  el._t = setTimeout(() => { el.hidden = true; el._cleanup?.() }, reducedMotion.matches ? 0 : 320)
+}
+
+function openChat(intent, trigger) {
   const url = `/chat/${intent ? `?intent=${encodeURIComponent(intent)}` : ''}`
   $('#chatFull').href = url
   if (frame.dataset.url !== url) { frame.src = url; frame.dataset.url = url }
-  lastFocus = document.activeElement
-  box.hidden = false
+  if (!isOpen(box)) lastFocus = document.activeElement
+  present(box, trigger, boxIn)
   document.body.style.overflow = 'hidden'
   setTimeout(() => $('#chatClose').focus(), 50)
 }
-// Keep Tab inside an open dialog.
+function openDummy(btn) {
+  if (!isOpen(dummy)) lastFocus = document.activeElement
+  dummy.classList.remove('dummy-left', 'dummy-right')
+  dummy.classList.add(btn && btn.getBoundingClientRect().right > innerWidth / 2 ? 'dummy-right' : 'dummy-left')
+  present(dummy, btn)
+  document.body.style.overflow = 'hidden'
+  setTimeout(() => $('#dummyClose').focus(), 50)
+}
+function closeChat() {
+  dismiss(box)
+  document.body.style.overflow = ''
+  lastFocus?.focus?.()
+}
+function closeDummy() {
+  dismiss(dummy)
+  document.body.style.overflow = ''
+  lastFocus?.focus?.()
+}
+
+// Keep Tab inside whichever dialog is open.
 function trapTab(e, dialog) {
   if (e.key !== 'Tab') return
-  const f = [...dialog.querySelectorAll('button,[href],input,textarea,select,[tabindex]:not([tabindex="-1"])')].filter((el) => !el.disabled && el.offsetParent !== null)
+  const f = [...dialog.querySelectorAll('button,[href],input,textarea,select,iframe,[tabindex]:not([tabindex="-1"])')].filter((el) => !el.disabled && el.offsetParent !== null)
   if (!f.length) return
   const first = f[0], last = f[f.length - 1]
   if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
   else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
 }
-function openDummy(btn) {
-  lastFocus = document.activeElement
-  dummy.classList.remove('dummy-left', 'dummy-right')
-  if (btn) {
-    const r = btn.getBoundingClientRect()
-    dummy.classList.add(r.right > innerWidth / 2 ? 'dummy-right' : 'dummy-left')
-  } else {
-    dummy.classList.add('dummy-left')
+
+// ---- gestures: drag a chat sheet down to dismiss ------------------------------
+// The sheet follows the finger 1:1 (keeping the offset from where it was grabbed),
+// resists with rubber-banding if pulled up, and on release the release velocity
+// is projected forward (like scroll deceleration) to decide open vs closed. A spring
+// then carries it there starting at the finger's exact velocity, and can be grabbed
+// again mid-flight.
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
+const project = (v, rate = 0.998) => (v / 1000) * rate / (1 - rate) // v in px/s -> px travelled
+const rubberband = (over, dim, c = 0.55) => (over * dim * c) / (dim + c * Math.abs(over))
+
+// Simulate a spring (Apple-style damping ratio + response) from `from` to `to` starting at v0 px/s.
+// Returns one position per 1/60s, so it can be played as keyframes and still carry real velocity.
+function springFrames(from, to, v0, { damping = 1, response = 0.3 } = {}) {
+  const w = (2 * Math.PI) / response, k = w * w, c = 2 * damping * w
+  const dt = 1 / 240
+  let x = from, v = v0, t = 0
+  const out = [x]
+  while (t < 1.5) {
+    for (let i = 0; i < 4; i++) { v += (-k * (x - to) - c * v) * dt; x += v * dt; t += dt }
+    out.push(x)
+    if (Math.abs(x - to) < 0.4 && Math.abs(v) < 8) break
   }
-  dummy.hidden = false
-  document.body.style.overflow = 'hidden'
-  setTimeout(() => $('#dummyClose').focus(), 50)
+  out[out.length - 1] = to
+  return out
 }
 
-function closeChat() {
-  box.hidden = true
-  document.body.style.overflow = ''
-  lastFocus?.focus?.()
+function dragSheet({ root, panel, handle, scrim = false, onDismiss }) {
+  const SCRIM = 0.28
+  let anim = null, scrimAnim = null, dragging = false, grab = 0, hist = []
+  const height = () => panel.getBoundingClientRect().height || 1
+  // read the on-screen (presentation) translateY, never the logical target
+  const currentY = () => new DOMMatrixReadOnly(getComputedStyle(panel).transform).m42
+  const paintScrim = (a) => { if (scrim) root.style.background = `rgba(15,23,41,${a.toFixed(3)})` }
+  const stop = () => { anim?.cancel(); scrimAnim?.cancel(); anim = scrimAnim = null }
+  const reset = () => {
+    stop()
+    panel.style.transition = 'none'
+    panel.style.transform = ''
+    if (scrim) root.style.background = ''
+    void panel.offsetWidth
+    panel.style.transition = ''
+  }
+  root._cleanup = reset
+
+  handle.addEventListener('pointerdown', (e) => {
+    if (!phone.matches || e.button > 0 || e.target.closest('button,a,input,textarea,select')) return
+    const y = currentY() // where the sheet is right now, even mid-flight
+    stop()
+    panel.style.transition = 'none'
+    panel.style.transform = `translateY(${y}px)`
+    handle.setPointerCapture(e.pointerId)
+    dragging = true
+    grab = e.clientY - y
+    hist = [{ t: e.timeStamp, y: e.clientY }]
+  })
+  handle.addEventListener('pointermove', (e) => {
+    if (!dragging) return
+    let y = e.clientY - grab
+    if (y < 0) y = -rubberband(-y, height()) // soft boundary above the resting position
+    panel.style.transform = `translateY(${y}px)`
+    paintScrim(SCRIM * (1 - clamp(y / height(), 0, 1)))
+    hist.push({ t: e.timeStamp, y: e.clientY })
+    while (hist.length > 2 && e.timeStamp - hist[0].t > 100) hist.shift()
+  })
+  const release = (e) => {
+    if (!dragging) return
+    dragging = false
+    const y = currentY()
+    const first = hist[0], last = hist[hist.length - 1]
+    const dtMs = last.t - first.t
+    const v = dtMs > 8 ? ((last.y - first.y) / dtMs) * 1000 : 0 // px/s, down is positive
+    const h = height()
+    const dismiss = y + project(v) > h * 0.4 // decide from where the gesture is heading
+    if (reducedMotion.matches) {
+      if (dismiss) onDismiss(); else reset()
+      return
+    }
+    const target = dismiss ? h + 40 : 0
+    const spring = dismiss ? { damping: 1, response: 0.28 } : { damping: Math.abs(v) > 300 ? 0.8 : 1, response: 0.35 }
+    const frames = springFrames(y, target, v, spring)
+    const duration = ((frames.length - 1) * 1000) / 60
+    anim = panel.animate(frames.map((x) => ({ transform: `translateY(${x}px)` })), { duration, easing: 'linear', fill: 'forwards' })
+    if (scrim) {
+      scrimAnim = root.animate(frames.map((x) => ({ backgroundColor: `rgba(15,23,41,${(SCRIM * (1 - clamp(x / h, 0, 1))).toFixed(3)})` })), { duration, easing: 'linear', fill: 'forwards' })
+    }
+    anim.onfinish = () => { if (dismiss) onDismiss(); else reset() }
+  }
+  handle.addEventListener('pointerup', release)
+  handle.addEventListener('pointercancel', release)
 }
-function closeDummy() {
-  dummy.hidden = true
-  document.body.style.overflow = ''
-  lastFocus?.focus?.()
-}
+dragSheet({ root: box, panel: boxIn, handle: $('.chatbox-bar', box), scrim: true, onDismiss: () => closeChat() })
+dragSheet({ root: dummy, panel: dummy, handle: $('.chat-dummy-bar', dummy), onDismiss: () => closeDummy() })
+
+// The phone menu: tapping outside closes it, and so does a quick swipe up.
+document.addEventListener('pointerdown', (e) => {
+  if (links.classList.contains('open') && !e.target.closest('#links, #menuBtn')) menu(false)
+})
+let swipe = null
+links.addEventListener('pointerdown', (e) => { swipe = { y: e.clientY, t: e.timeStamp } })
+links.addEventListener('pointerup', (e) => {
+  if (!swipe) return
+  const dy = e.clientY - swipe.y, dt = Math.max(e.timeStamp - swipe.t, 1)
+  swipe = null
+  if (dy < -24 && dy + project((dy / dt) * 1000) < -80) menu(false)
+})
+
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-chat]')
   if (!b) return
   e.preventDefault()
   menu(false)
   if (!b.dataset.chat) { openDummy(b); return }
-  openChat(b.dataset.chat || '')
+  openChat(b.dataset.chat || '', b)
 })
 $('#chatClose').onclick = closeChat
 $('#dummyClose').onclick = closeDummy
 box.addEventListener('click', (e) => e.target === box && closeChat())
 dummy.addEventListener('click', (e) => e.target === dummy && closeDummy())
 addEventListener('keydown', (e) => {
-  if (!dummy.hidden) trapTab(e, dummy)
+  if (isOpen(dummy)) trapTab(e, dummy)
+  else if (isOpen(box)) trapTab(e, boxIn)
   if (e.key !== 'Escape') return
-  if (!box.hidden) closeChat()
-  else if (!dummy.hidden) closeDummy()
+  if (isOpen(box)) closeChat()
+  else if (isOpen(dummy)) closeDummy()
   else menu(false)
 })
 phone.addEventListener('change', () => menu(false))
