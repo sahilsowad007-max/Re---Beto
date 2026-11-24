@@ -134,8 +134,7 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 /* headline words: rise in on load, lift on hover */
 .xhero h1 .w{display:inline-block;opacity:0;translate:0 .6em;transition:opacity .6s var(--ease-soft),translate .6s var(--ease-soft),color .25s;transition-delay:calc(var(--i,0) * 50ms + 120ms)}
 .xhero.go h1 .w{opacity:1;translate:0 0}
-.xhero.go h1 .w:hover{translate:0 -.08em;color:var(--terra);transition-delay:0ms}
-.xhero .glowtext .w:hover{color:var(--terra)}
+.xhero.go h1 .w:hover{translate:0 -.08em;transition-delay:0ms}
 .xhero .ctas,.xhero .hero-aside{opacity:1}
 .mx .xhero:not(.go) .ctas,.mx .xhero:not(.go) .hero-aside{opacity:0;translate:0 18px}
 .mx .xhero .ctas,.mx .xhero .hero-aside{transition:opacity .6s var(--ease-soft) .5s,translate .6s var(--ease-soft) .5s}
@@ -247,7 +246,7 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   padding:clamp(24px,4vw,44px) clamp(16px,3vw,32px);
   background:linear-gradient(180deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 100%);
   border:1px solid rgba(255,255,255,0.22);
-  border-radius:30px;
+  border-radius:30px;color:#F3F5FC;
   box-shadow:0 30px 70px -20px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,0.2);
   /* no backdrop-filter of its own: .splash-overlay already blurs the page, and a
      second blur on top (translucent on translucent) only costs paint time */
@@ -260,7 +259,7 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 /* leave along the path we arrived on */
 .splash-overlay.exiting .splash-card{transform:scale(.84) translateY(14px);opacity:0}
 .splash-badge{
-  font-size:.75rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase;
+  font-size:.75rem;font-weight:900;
   color:#F4C76A;display:inline-block;padding:6px 14px;border-radius:999px;
   background:rgba(244,199,106,.16);border:1px solid rgba(244,199,106,.35);
   box-shadow:0 0 12px rgba(244,199,106,.25);
@@ -269,14 +268,14 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 .splash-title .splash-mark{color:#F79549}
 .splash-sub{font-size:clamp(.875rem,1.6vw,1.125rem);color:#F3F5FC;line-height:1.6;margin:0;max-width:60ch;text-shadow:0 1px 8px rgba(0,0,0,.3)}
 .splash-credit{display:flex;align-items:center;gap:8px;margin-top:10px;justify-content:center}
-.splash-credit-label{font-size:.75rem;font-weight:900;color:#F4C76A;text-transform:uppercase;letter-spacing:.16em}
+.splash-credit-label{font-size:.75rem;font-weight:900;color:#F4C76A}
 .splash-credit-link{font-size:1rem;font-weight:800;color:#fff;transition:color .2s;text-shadow:0 1px 8px rgba(0,0,0,.3)}
 .splash-credit-link:hover{color:#F79549}
 .splash-credit-role{font-size:.75rem;font-weight:700;color:#F3F5FC}
 .splash-portfolio-text{
   margin-top:12px;display:inline-block;padding:11px 20px;border-radius:12px;
   background:rgba(255,255,255,0.1);border:1px solid rgba(244,199,106,.45);
-  color:#fff;font-size:.8125rem;font-weight:800;letter-spacing:.04em;
+  color:#fff;font-size:.8125rem;font-weight:800;
   text-decoration:none;transition:transform .2s,background .2s,border-color .2s,color .2s,box-shadow .2s;
   cursor:pointer;box-shadow:0 0 0 rgba(244,199,106,0)
 }
@@ -290,11 +289,11 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 .splash-btn{
   margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
   min-height:48px;padding:0 28px;border-radius:999px;background:#fff;color:#171B3B;
-  font-weight:900;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,filter .2s;
+  font-weight:900;border:none;cursor:pointer;transition:transform .2s,filter .2s; /* box-shadow is not transitioned: the focus ring must appear instantly */
   box-shadow:0 16px 32px -16px rgba(247,149,73,.4);
 }
 /* No outline stroke on the splash button (it is focused on load). Focus shows as a soft glow instead. */
-.splash-btn:focus-visible{outline:none;border-radius:999px;box-shadow:0 16px 32px -16px rgba(247,149,73,.4),0 0 28px rgba(247,149,73,.5)}
+.splash-btn:focus-visible{outline:none;border-radius:999px;transform:scale(1.04);box-shadow:0 14px 32px -10px rgba(15,23,59,.55)} /* the ring appears instantly, in a neutral shadow */
 @media (hover:hover){
   .splash-btn:hover{filter:brightness(1.05);transform:translateY(-2px);box-shadow:0 22px 44px -20px rgba(247,149,73,.5)}
 }
@@ -305,6 +304,103 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 
 /* The page behind the splash is blurred and dimmed by .splash-overlay's own
    backdrop-filter; filtering all of <main> was costly and is no longer needed. */
+
+/* ---- Glass sections: the three promises, the stack, the briefing form -------------
+   Translucent layers over soft colour, so the blur has something to refract. Material
+   weight follows hierarchy: the dark primary is the densest layer, tinted glass steps
+   lighter, and the big detail panel is thicker (more blur, deeper shadow) than the small
+   rows. A bright top edge reads as light catching the surface. Colour keeps the
+   hierarchy it already had: ink, then lavender, then peach; each layer keeps its own hue.
+   Fallbacks for reduced transparency and high contrast follow in the preference blocks. */
+:root{--glass-edge:rgba(255,255,255,.7);--glass-rim:rgba(255,255,255,.2)}
+#pillars,#stack,#plan{position:relative;isolation:isolate;overflow:clip}
+#pillars::before,#stack::before,#plan::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+
+/* backdrops: a few soft colour fields placed behind where each hue sits in the layout */
+#pillars::before{background:
+  radial-gradient(34% 55% at 14% 72%,color-mix(in srgb,var(--ink-2) 17%,transparent),transparent 70%),
+  radial-gradient(32% 50% at 50% 62%,rgba(110,120,216,.21),transparent 70%),
+  radial-gradient(34% 55% at 88% 72%,rgba(247,149,73,.20),transparent 70%),
+  linear-gradient(180deg,#fff,#F6F7FD)}
+#stack::before{background:
+  radial-gradient(30% 46% at 8% 80%,rgba(46,125,107,.15),transparent 70%),
+  radial-gradient(34% 48% at 32% 36%,rgba(110,120,216,.16),transparent 70%),
+  radial-gradient(34% 50% at 92% 58%,rgba(247,149,73,.16),transparent 70%),
+  #F1F4FF}
+#plan::before{background:
+  radial-gradient(40% 58% at 86% 28%,rgba(247,149,73,.11),transparent 70%),
+  radial-gradient(36% 54% at 62% 88%,rgba(110,120,216,.10),transparent 70%),
+  radial-gradient(34% 50% at 8% 22%,rgba(46,125,107,.07),transparent 70%),
+  linear-gradient(160deg,#FFFBF4,var(--cream))}
+
+/* the three promises: one glass family, three tints in the existing order of weight */
+.pillar{
+  border:1px solid var(--glass-rim);
+  -webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);
+  background-image:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,0) 42%);
+  box-shadow:inset 0 1px 0 var(--glass-edge),inset 0 -1px 0 rgba(255,255,255,.1),0 28px 60px -36px rgba(23,27,59,.45);
+}
+.pillar:nth-child(1){background-color:rgba(23,27,59,.88);border-color:rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(255,255,255,.06),0 32px 64px -34px rgba(23,27,59,.7)}
+.pillar:nth-child(2){background-color:rgba(206,212,255,.58);border-color:rgba(255,255,255,.55)}
+.pillar:nth-child(3){background-color:rgba(255,226,196,.62);border-color:rgba(255,255,255,.6)}
+.pillar:nth-child(2) .pt .ic,.pillar:nth-child(3) .pt .ic{background:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
+@media (hover:hover){
+  .pillar:hover{box-shadow:inset 0 1px 0 var(--glass-edge),inset 0 -1px 0 rgba(255,255,255,.1),0 36px 70px -34px rgba(23,27,59,.55)}
+}
+
+/* the stack: thin glass rows, one dense selected row, one thick glass detail panel */
+.lrow{
+  background-color:rgba(255,255,255,.52);border:1px solid rgba(255,255,255,.72);
+  -webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 30px -24px rgba(23,27,59,.4);
+}
+.lrow[aria-selected="true"]{
+  background-color:rgba(23,27,59,.84);border-color:rgba(255,255,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 22px 44px -24px rgba(23,27,59,.7);
+}
+.lrow[aria-selected="true"] .n{box-shadow:inset 0 0 0 1px rgba(255,255,255,.4),0 0 0 3px rgba(255,255,255,.08)} /* keeps the dark chip readable on the dark glass */
+.ldetail{
+  background-color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.72);
+  background-image:radial-gradient(90% 60% at 0% 0%,color-mix(in srgb,var(--k,#2E336A) 16%,transparent),transparent 65%);
+  -webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.2),0 40px 80px -40px rgba(23,27,59,.5);
+}
+.ldetail .lk.you{color:#1F6455}
+.ldetail .lk.we{color:#9A3B26}
+
+/* the briefing form: a luminous-rim glass slab with a diagonal sheen, frosted wells and glass chips */
+.planx .plan{padding-inline:var(--gutter)} /* enterprise.css zeroed all padding here, so the copy and the card touched the screen edges */
+.planx .lead-card{
+  position:relative;isolation:isolate;border:1px solid transparent;border-radius:28px;
+  padding:clamp(24px,3vw,36px);
+  background:
+    linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.34)) padding-box,
+    linear-gradient(140deg,rgba(255,255,255,.95),rgba(255,255,255,.18) 34%,rgba(247,149,73,.6) 70%,rgba(110,120,216,.65)) border-box;
+  background-origin:border-box;
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);backdrop-filter:blur(28px) saturate(1.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 50px 90px -50px rgba(23,27,59,.55);
+}
+.planx .lead-card::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.5),rgba(255,255,255,0) 38%)}
+.planx .lead-fields input:not([type=radio]),.planx .lead-fields textarea{
+  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);
+  box-shadow:inset 0 2px 6px rgba(23,27,59,.08),inset 0 1px 0 rgba(255,255,255,.7);
+}
+.planx .lead-fields input:focus,.planx .lead-fields textarea:focus{
+  background:rgba(255,255,255,.78);border-color:#fff;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--river) 24%,transparent),inset 0 2px 6px rgba(23,27,59,.06);
+}
+.planx .lead-chips span{background:rgba(255,255,255,.44);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}
+.planx .lead-chips input:checked+span{
+  background:rgba(23,27,59,.88);border-color:rgba(255,255,255,.2);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 12px 26px -14px rgba(23,27,59,.7);
+}
+.planx .lead-send{
+  background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0) 55%),rgba(23,27,59,.92);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 20px 38px -18px rgba(23,27,59,.75);
+}
+.planx .lead-send[disabled]{background:rgba(217,220,232,.85);color:#4A4F6A;border-color:rgba(255,255,255,.6);box-shadow:none}
+@media (hover:hover){.planx .lead-send:not([disabled]):hover{filter:brightness(1.14)}}
 
 /* ---- accessibility preferences ------------------------------------------- */
 /* (reduced motion lives in one block at the end of this file) */
@@ -318,7 +414,16 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   .chatbox{background:rgba(15,23,41,.55);backdrop-filter:none;-webkit-backdrop-filter:none}
   .links{backdrop-filter:none;-webkit-backdrop-filter:none}
   .splash-overlay{background:#0F173B;backdrop-filter:none;-webkit-backdrop-filter:none}
-  .splash-card{background:#171B3B}
+  .splash-card{background:#171B3B;color:#F3F5FC}
+  /* glass sections become solid surfaces in the same tints */
+  #pillars::before,#stack::before,#plan::before,.planx .lead-card::before{display:none}
+  .pillar,.lrow,.ldetail,.planx .lead-card,.planx .lead-chips span,.planx .lead-fields input:not([type=radio]),.planx .lead-fields textarea{-webkit-backdrop-filter:none;backdrop-filter:none;background-image:none}
+  .pillar:nth-child(1){background-color:#171B3B}
+  .pillar:nth-child(2){background-color:#E8EAFE}
+  .pillar:nth-child(3){background-color:#FFF0DF}
+  .lrow,.planx .lead-chips span,.planx .lead-fields input:not([type=radio]),.planx .lead-fields textarea{background-color:#fff}
+  .lrow[aria-selected="true"],.planx .lead-chips input:checked+span,.planx .lead-send{background:#171B3B}
+  .ldetail,.planx .lead-card{background:#fff;border:1px solid var(--line)}
 }
 @media (prefers-contrast:more){
   .nav .nav-in,.nav:not(.scrolled) .nav-in,.nav.scrolled .nav-in{background:var(--white);border:2px solid var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none}
@@ -326,7 +431,16 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
   .glass,.legend a,.tile figcaption,.xhero .btn.line{background:var(--white);border:2px solid var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none}
   .voice,.console{background:#14183A;border:2px solid #fff;backdrop-filter:none;-webkit-backdrop-filter:none}
   .links a,.lrow{outline-offset:2px}
-  .splash-card{background:#171B3B;border:2px solid #fff}
+  .splash-card{background:#171B3B;color:#F3F5FC;border:2px solid #fff}
+  /* glass sections: solid fills and defined edges */
+  #pillars::before,#stack::before,#plan::before,.planx .lead-card::before{display:none}
+  .pillar,.lrow,.ldetail,.planx .lead-card,.planx .lead-chips span,.planx .lead-fields input:not([type=radio]),.planx .lead-fields textarea{-webkit-backdrop-filter:none;backdrop-filter:none;background-image:none;border:2px solid var(--ink)}
+  .pillar:nth-child(1){background-color:#171B3B}
+  .pillar:nth-child(2){background-color:#E8EAFE}
+  .pillar:nth-child(3){background-color:#FFF0DF}
+  .lrow,.planx .lead-chips span,.planx .lead-fields input:not([type=radio]),.planx .lead-fields textarea{background-color:#fff}
+  .lrow[aria-selected="true"],.planx .lead-chips input:checked+span,.planx .lead-send{background:#171B3B}
+  .ldetail,.planx .lead-card{background:#fff}
   .hero-replay{border-color:var(--ink);color:var(--ink)}
 }
 
@@ -362,6 +476,61 @@ main > section:not(#hero) ~ section:not(#hero){z-index:2}
 
 /* tight display tracking belongs to Latin type; Bangla conjuncts need to stay open */
 [lang="bn"],[lang="bn"] *{letter-spacing:0!important}
+
+/* ---- Hallmark pass: labels, headlines, imagery, motion hygiene --------------- */
+/* labels are the body face, a step smaller, untracked, in sentence case (gate 67) */
+.inpress span,.dummy-label,.c-head small,.plan-card .pk,.kicker,.head .kicker,.ldetail .lk{text-transform:none;letter-spacing:0}
+/* headings are set one way: the grey second phrase is only the hero's (gate 38iii) */
+/* (the grey second phrase is gone from the h2s: nothing to override) */
+/* imagery sits still; the card around it takes the hover feedback (gate 11) */
+.ind:hover img,.tile:hover video,.tile:hover img{transform:none}
+/* a looping cue pauses when the reader points at it or focuses near it (gate 18) */
+.scroll-cue:hover i,.scroll-cue:focus-within i{animation-play-state:paused}
+/* balanced display heads, no stranded last word (F3) */
+h1,h2,h3{text-wrap:balance}
+/* the demo bar's two labels are spaced, not joined by a middle dot (gate 63) */
+.hero-demo-bar>p span+span{margin-left:.75em}
+
+/* ---- Type system (Apple: optical size, tracking and leading change with size) ---
+   One scale, in rem so it follows the reader's text-size setting. As text grows,
+   tracking tightens and leading closes up; as it shrinks, tracking opens a touch and
+   leading loosens. Hierarchy is weight + size + leading together, not size alone:
+   700 for the one display line, 600 for section heads, titles and labels, 400 for reading. */
+:root{
+  --fs-display:clamp(2.5rem,5vw,4.5rem);   --lh-display:1.02; --track-display:-.035em;
+  --fs-h2:clamp(2rem,3.9vw,3.25rem);       --lh-h2:1.06;      --track-h2:-.03em;
+  --fs-h3:1.5rem;                          --lh-h3:1.2;       --track-title:-.02em;
+  --fs-title:1.125rem;                     --lh-title:1.3;    --track-card:-.005em;
+  --fs-lede:clamp(1.0625rem,1.3vw,1.25rem);--lh-lede:1.5;     --track-lede:-.006em;
+  --fs-body:1rem;                          --lh-body:1.6;
+  --fs-small:.9375rem;                     --lh-small:1.55;
+  --fs-caption:.8125rem;                   --lh-caption:1.45; --track-small:.01em;
+}
+@media (max-width:620px){:root{--fs-display:clamp(2.625rem,11.5vw,3.375rem)}}
+body{font-size:var(--fs-body);line-height:var(--lh-body);font-optical-sizing:auto;font-kerning:normal;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+/* display: the one loudest line */
+.xhero h1{font-size:var(--fs-display);font-weight:800;font-stretch:108%;line-height:var(--lh-display);letter-spacing:var(--track-display)}
+/* section heads: a step quieter in weight, so the hero stays the loudest thing on the page */
+.head h2,.bf-cta h2{font-weight:700;line-height:var(--lh-h2);letter-spacing:var(--track-h2)}
+.head h2{font-size:var(--fs-h2);max-width:24ch} /* ch tracks the face, so the limit is retuned whenever the display font changes */
+/* titles */
+h3,.pillar h3,.ldetail h3,.run h3{font-weight:700;line-height:var(--lh-h3);letter-spacing:var(--track-title)}
+.pillar h3,.ldetail h3{font-size:var(--fs-h3)}
+.run h3{font-size:1.3125rem}
+/* card and list titles: weight does the work, size stays near body */
+.lrow b,.risks b,.ind b,.eng b,.agents b,.splash-credit-link{font-weight:600;line-height:var(--lh-title);letter-spacing:var(--track-card)}
+.ind b{font-size:var(--fs-title)}
+/* reading text */
+.lede{font-size:var(--fs-lede);line-height:var(--lh-lede);letter-spacing:var(--track-lede);font-weight:400}
+.hero-aside>p:first-child{font-size:var(--fs-body);line-height:var(--lh-body);color:var(--slate)}
+.pillar p,.risks span,.ind span,.eng span,.ldetail ul,.faq .qa details p,.plan-copy .ticks{font-size:var(--fs-small);line-height:var(--lh-small)}
+.faq .qa summary{font-size:var(--fs-body);font-weight:600;line-height:var(--lh-title)}
+/* small text: looser tracking and leading so it stays legible (the opposite of display) */
+.lrow small,.bub small,.hero-message small,.run dt,.run dd,.rt em,.agents span,.agents a,.dflow figcaption,.inpress span,
+.kicker,.ldetail .lk,.dummy-label,.splash-credit-role,.splash-credit-label,.hero-demo-bar>p,.pillar ul,.hero-demo-input{letter-spacing:var(--track-small)}
+.lrow small,.run dt,.run dd,.agents span,.pillar ul{line-height:var(--lh-caption)}
+/* Bangla sets taller and needs open spacing at every size */
+:lang(bn),[lang="bn"]{line-height:1.7}
 
 /* grab handle on the phone chat sheet: the affordance for swipe-down-to-dismiss */
 @media (max-width:620px){

@@ -364,7 +364,7 @@
 
       const ind = INDUSTRIES[industryIndex]
       industryIndex = (industryIndex + 1) % INDUSTRIES.length
-      if (industryLabel) industryLabel.innerHTML = `<span style="color:${ind.color};font-weight:700">${ind.name}</span> · <span style="color:${ind.color};font-weight:700">beto.your-organisation.ai</span>`
+      if (industryLabel) industryLabel.innerHTML = `<span style="color:${ind.color};font-weight:700">${ind.name}</span><span style="color:${ind.color};font-weight:700">beto.your-organisation.ai</span>`
       demo.style.setProperty('--hero-theme', ind.color)
 
       const msgs = buildMessages(ind)

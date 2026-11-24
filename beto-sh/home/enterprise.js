@@ -59,7 +59,7 @@ const rows = STACK.map((L, i) => {
   b.setAttribute('role', 'tab')
   b.setAttribute('aria-controls', 'ldetail')
   b.style.setProperty('--k', L.k)
-  b.innerHTML = `<span class="n${L.dk ? ' dk' : ''}">0${i + 1}</span><span><b>Layer ${i + 1} · ${L.n}</b><small>${L.line}</small></span>`
+  b.innerHTML = `<span class="n${L.dk ? ' dk' : ''}">0${i + 1}</span><span><b>Layer ${i + 1}: ${L.n}</b><small>${L.line}</small></span>`
   b.onclick = () => pick(i, true)
   return b
 }).reverse()
@@ -74,7 +74,7 @@ function pick(i, user) {
   const L = STACK[i]
   detail.style.setProperty('--k', L.k)
   detail.setAttribute('aria-labelledby', `ltab-${i}`)
-  detail.innerHTML = `<h3>Layer ${i + 1} · ${L.n}</h3>
+  detail.innerHTML = `<h3>Layer ${i + 1}: ${L.n}</h3>
     <p class="lk you">You choose</p><ul>${L.you.map((t) => `<li>${t}</li>`).join('')}</ul>
     <p class="lk we">Betopia builds and runs</p><ul>${L.we.map((t) => `<li>${t}</li>`).join('')}</ul>`
   if (user) {
